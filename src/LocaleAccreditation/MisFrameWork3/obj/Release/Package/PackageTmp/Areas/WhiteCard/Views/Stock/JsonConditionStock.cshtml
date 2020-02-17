@@ -1,0 +1,41 @@
+﻿@{
+    Response.ContentType = "application/json";
+}
+[
+
+    {
+        "id":"STOCK_WHOLE",
+        "text":"全部库存",
+        "ctl_type":"textbox",
+        "options":{}
+    },
+    {
+        "id":"STOCK_OVERPLUS",
+        "text":"剩余库存",
+        "ctl_type":"textbox",
+        "options":{}
+    },
+   {
+        "id":"COMPANY_ID",
+        "text":"单位名称",
+        "ctl_type":"diclarge",
+        "options":{
+            "dic_json_url": "JsonDicLarge?comma_is_or=true&dic=V_D_FW_COMP",
+            "dic_view_url": "ViewDicLargeUI?dic=V_D_FW_COMP"
+        }
+    },
+   {
+        "id":"STOCK_SCRAP",
+        "text":"报废库存",
+        "ctl_type":"textbox",
+        "options":{}
+    },
+   {
+        "id":"COMPANY_ID_1",
+        "text":"单位名称含下级",
+        "ctl_type":"diclarge",
+        "options":{
+         "dic_json_url": "JsonDicLarge?comma_is_or=true&dic=V_D_FW_COMP",
+            "dic_view_url": "ViewDicLargeUI?dic=V_D_FW_COMP"}
+    }
+]

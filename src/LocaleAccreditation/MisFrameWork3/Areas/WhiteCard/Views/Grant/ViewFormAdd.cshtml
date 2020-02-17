@@ -1,0 +1,187 @@
+﻿@{
+    ViewBag.Title = "ViewFormAdd";
+}
+<div style="padding: 10px">
+    <form id="formData" method="post" action="ActionAdd" enctype="multipart/form-data">
+        @* __TIPS__ 输入元素尽量统一为两列以内，宽度要与Index 打开的窗体宽度对应*@
+        @*<div style="margin-bottom:5px;">
+            <input id="EXTEND_NAME" name="EXTEND_NAME" class="easyui-textbox" data-options="width:'96%',labelWidth:120,iconCls:'icon-man',label:'发卡人：',labelAlign:'right',required:true">
+        </div>
+        <div style="margin-bottom:5px;">
+            <input id="EXTEND_ID" name="EXTEND_ID" class="easyui-diclarge" data-options="width:'96%',labelWidth:120,label:'发卡人单位：',labelAlign:'right',required:false,
+                       title: '所属单位',
+                       dic_json_url:'JsonDicLarge?comma_is_or=true&dic=V_D_FW_COMP',
+                       dic_view_url:'ViewDicLargeUI?dic=V_D_FW_COMP',
+                       dic_multiple_value:false
+                       ">
+        </div>*@
+        <input type="hidden" id="FRIST" name="FRIST" value="" />
+        <input type="hidden" id="LAST" name="LAST" value="" />
+        <div style="margin-bottom:5px;">
+            <input id="RECEIVE_NAME" name="RECEIVE_NAME" class="easyui-textbox" data-options="width:'96.5%',labelWidth:120,iconCls:'icon-man',label:'领卡人：',labelAlign:'right',required:true">
+        </div>
+        <div style="margin-bottom:5px;">
+            <input id="RECEIVE_P" name="RECEIVE_P" class="easyui-diclarge" data-options="width:'96.5%',labelWidth:120,label:'市级选择：',labelAlign:'right',required:true,
+                       title: '单位选择',
+                       dic_json_url:'JsonDicLarge?comma_is_or=true&dic=V_D_FW_COMP_P',
+                       dic_view_url:'ViewDicLargeUI?dic=V_D_FW_COMP',
+                       dic_multiple_value:false
+                       ">
+        </div>
+        <div style="margin-bottom:5px;">
+            <input id="RECEIVE_C" name="RECEIVE_C" class="easyui-diclarge" data-options="width:'96.5%',labelWidth:120,label:'区县选择：',labelAlign:'right',required:false,
+                       title: '单位选择',
+                       parentDic:'RECEIVE_P',
+                       sort:'DM',
+                       dic_json_url:'JsonDicLarge?comma_is_or=true&dic=V_D_FW_COMP_C',
+                       dic_view_url:'ViewDicLargeUI?dic=V_D_FW_COMP',
+                       dic_multiple_value:false
+                       ">
+        </div>
+        <div style="margin-bottom:5px;">
+            <input id="RECEIVE_ID" name="RECEIVE_ID" class="easyui-diclarge" data-options="width:'96.5%',labelWidth:120,label:'派出所选择：',labelAlign:'right',required:false,
+                       title: '单位选择',
+                       parentDic:'RECEIVE_C',
+                       sort:'DM',
+                       dic_json_url:'JsonDicLarge?comma_is_or=true&dic=V_D_FW_COMP',
+                       dic_view_url:'ViewDicLargeUI?dic=V_D_FW_COMP',
+                       dic_multiple_value:false
+                       ">
+        </div>
+        @*<div style="margin-bottom:5px;">
+            <input id="RECEIVE_C" name="RECEIVE_C" class="easyui-dicshort" data-options="width:'96.5%',labelWidth:120,label:'区县选择：',labelAlign:'right',required:true,
+                      url: 'JsonDicShort?dic=V_D_FW_COMP',
+                       multiple: false,
+                       parentDic:'RECEIVE_P',
+                       required:false">
+        </div>*@
+        @*<div style="margin-bottom:5px;">
+            <input id="RECEIVE_ID" name="RECEIVE_ID" class="easyui-dicshort" data-options="width:'96.5%',labelWidth:120,label:'派出所选择：',labelAlign:'right',required:true,
+                       url: 'JsonDicShort?dic=V_D_FW_COMP_C',
+                       multiple: false,
+                       parentDic:'RECEIVE_C',
+                       required:false">
+        </div>*@
+        <div style="margin-bottom:5px;">
+            <input id="RECEIVE_NUMBER" name="RECEIVE_NUMBER" class="easyui-numberbox" data-options="width:'48%',labelWidth:120,label:'领卡数量：',labelAlign:'right',min:0,editable:true,required:true">
+            <input id="RECEIVE_PHONE" name="RECEIVE_PHONE" class="easyui-textbox" data-options="width:'48%',labelWidth:120,label:'领卡人联系方式：',labelAlign:'right',required:false">
+        </div>
+        <div style="margin-bottom:5px;">
+            <input id="CRAD_FRIST" name="CRAD_FRIST" class="easyui-textbox" data-options="width:'48%',labelWidth:120,label:'起始卡号：',labelAlign:'right',disabled:'true',required:false">
+            <input id="CRAD_LAST" name="CRAD_LAST" class="easyui-textbox" data-options="width:'48%',labelWidth:120,label:'末尾卡号：',labelAlign:'right',disabled:'true',required:false">
+        </div>
+        <div style="margin-bottom:5px;">
+            <input id="SD_NUMBER" name="SD_NUMBER" class="easyui-numberbox" data-options="width:'96.5%',labelWidth:120,label:'耗材数量(卷)：',labelAlign:'right',min:0,editable:true,required:false">
+
+        </div>
+        <div style="margin-bottom:5px;">
+            <input id="REASON_NUMBER" name="REASON_NUMBER" class="easyui-diclarge" data-options="width:'96.5%',labelWidth:120,label:'超额原因：',labelAlign:'right',required:false,
+                       title: '原因选择',
+                       dic_json_url:'JsonDicLarge?comma_is_or=true&dic=D_REASON',
+                       dic_view_url:'ViewDicLargeUI?dic=D_REASON',
+                       dic_multiple_value:false
+                       ">
+        </div>
+        <div style="margin-bottom:5px;">
+            <input id="RECEIVE_TIME" name="RECEIVE_TIME" class="easyui-datebox" data-options="width:'96.5%',labelWidth:120,label:'领卡时间：',labelAlign:'right',required:false">
+        </div>
+    </form>
+</div>
+<script>
+
+
+    $('#RECEIVE_NUMBER').numberbox({
+        onChange: function () {
+            //do something
+            var result = {};
+            var RECEIVE_NUMBER = $('#RECEIVE_NUMBER').numberbox('getValue');
+            var RECEIVE_ID = $('#RECEIVE_ID').numberbox('getValue');
+            var RECEIVE_P = $('#RECEIVE_P').numberbox('getValue');
+            var RECEIVE_C = $('#RECEIVE_C').numberbox('getValue');
+            result.RECEIVE_ID = RECEIVE_ID;
+            result.RECEIVE_P = RECEIVE_P;
+            result.RECEIVE_C = RECEIVE_C;
+            result.RECEIVE_NUMBER = RECEIVE_NUMBER;
+            if (RECEIVE_ID != ""|| RECEIVE_P != "" || RECEIVE_C != "") {               
+                var url = '@Url.Action("JsonCardnumber", "Grant")';
+                $.getJSON(url, result, function (data) {
+                    console.log(data);
+                    if (data.success == false) {
+                        $.messager.alert({
+                            icon: 'error',
+                            title: '错误',
+                            msg: data.message
+                        });
+                        return;
+                    }
+                    else {
+                        debugger
+                        $('#SD_NUMBER').numberbox('setValue', data.SD_NUMBER);
+                        $('#CRAD_FRIST').textbox('setValue', data.CRAD_FRIST);
+                        $('#CRAD_LAST').textbox('setValue', data.CRAD_LAST);
+                        $('#FRIST').val(data.CRAD_FRIST);
+                        $('#LAST').val(data.CRAD_LAST);
+                    }
+                    $("[type='hidden']").change();//__TIPS__:hidden控件改变后无法触发change事件，所以要单独处理，否则可能会影响某些控件的使用。
+                });
+            }
+        }
+    });
+
+    //function myFunction() {   
+    //    debugger
+    //    alert("dajihao");
+    //    var v = $('#RECEIVE_NUMBER').numberbox('getValue');
+    //    $.getJSON("JsonCardnumber?id=" + v,function (data) {
+    //        console.log(data);
+    //        $("[type='hidden']").change();//__TIPS__:hidden控件改变后无法触发change事件，所以要单独处理，否则可能会影响某些控件的使用。
+    //    });
+
+    //}
+
+
+
+    function btnForm_OK_Click_Event(e) {
+        console.log($('#formData').serialize());
+        $('#formData').form('submit', {
+            onSubmit: function (d) {
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    return false;
+                }
+                @* __TIPS__:这里可以把Form以外的一些值添加到服务器 *@
+                //d.OPERATE = "2";
+                return true;
+            },
+            success: function (data) {
+                var data = eval('(' + data + ')');  // change the JSON string to javascript object
+                if (!data.success) {
+                    $.messager.alert(
+                        {
+                            icon: 'error',
+                            title: '提示',
+                            msg: data.message
+                        });
+                } 
+                else {
+                    $.messager.alert(
+                        {
+                            title: '提示',
+                            msg: '保存成功！',
+                            fn: function () {
+                                $('#cmpDG').datagrid("reload");
+                                $('#winMainForm').dialog("close");
+                            }
+                        }
+                    );
+                }
+            }
+        });
+    }
+    $(function () {
+        $("#btnForm_OK").bind('click', btnForm_OK_Click_Event);
+
+    })
+</script>
+
+

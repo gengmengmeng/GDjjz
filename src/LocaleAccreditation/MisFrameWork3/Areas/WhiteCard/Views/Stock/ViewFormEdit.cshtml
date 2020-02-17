@@ -1,0 +1,81 @@
+﻿@{
+}
+<div style="padding: 10px">
+    <form id="formData" method="post" action="ActionEdit" enctype="multipart/form-data">
+        @* __TIPS__ 输入元素尽量统一为两列以内，宽度要与Index 打开的窗体宽度对应*@
+        <input type="hidden" id="OBJECT_ID" name="OBJECT_ID" value="" />
+        @* 不要使用实际的主键 *@
+        <div style="margin-bottom:5px;">
+            <input id="STOCK_WHOLE" name="STOCK_WHOLE" class="easyui-numberbox" data-options="width:'96%',labelWidth:120,label:'全部库存：',labelAlign:'right',min:0,editable:true,required:true">
+        </div>
+        <div style="margin-bottom:5px;">
+            <input id="STOCK_OVERPLUS" name="STOCK_OVERPLUS" class="easyui-numberbox" data-options="width:'96%',labelWidth:120,label:'剩余库存：',labelAlign:'right',min:0,editable:true,required:true">
+        </div>
+        <div style="margin-bottom:5px;">
+            <input id="STOCK_SCRAP" name="STOCK_SCRAP" class="easyui-numberbox" data-options="width:'96%',labelWidth:120,label:'报废库存：',labelAlign:'right',min:0,editable:true,required:true">
+        </div>
+        <div style="margin-bottom:5px;">
+            <input id="CARD_SD" name="CARD_SD" class="easyui-numberbox" data-options="width:'96%',labelWidth:120,label:'耗材库存（卷）：',labelAlign:'right',min:0,editable:true,required:true">
+        </div>
+
+    </form>
+</div>
+<script>
+
+    function btnForm_OK_Click_Event(e) {
+        console.log($('#formData').serialize());
+        $('#formData').form('submit', {
+            onSubmit: function (d) {
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    return false;
+                }
+                return true;
+            },
+            success: function (data) {
+                var data = eval('(' + data + ')');  // change the JSON string to javascript object
+                if (!data.success) {
+                    $.messager.alert({
+                        icon: 'error',
+                        title: '提示',
+                        width: 300,
+                        msg: data.message
+                    });
+                }
+                else {
+                    $.messager.alert({
+                        icon: 'info',
+                        title: '提示',
+                        msg: '修改成功！',
+                        fn: function () {
+                            $('#winMainForm').dialog("close");
+                            $('#cmpDG').datagrid("reload");
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    @* 绑定窗体外按钮的事件，按钮名称要与Index里的对应 *@
+    $(function () {
+        $("#btnForm_OK").bind('click', btnForm_OK_Click_Event);
+        @*//加载录入内容
+        @* __TIPS__:这里修改加载数据的地址,可以使用绝对地址的方式【@Url.Action("JsonDataList", "Roles")】*@
+        $.getJSON("JsonDataList1?id=" + $("#OBJECT_ID").val(), function (data) {
+            console.log(data);
+            //if (data.rows == undefined) {
+            //    $.messager.alert({
+            //        icon: 'error',
+            //        title: '错误',
+            //      msg: "没有查到相应记录【" + $("#OBJECT_ID").val() + "】"
+            //    });
+            //    return;
+            //}
+            $('#formData').form("load", data);
+           $("[type='hidden']").change();//__TIPS__:hidden控件改变后无法触发change事件，所以要单独处理，否则可能会影响某些控件的使用。
+        });
+    });
+</script>
+
+

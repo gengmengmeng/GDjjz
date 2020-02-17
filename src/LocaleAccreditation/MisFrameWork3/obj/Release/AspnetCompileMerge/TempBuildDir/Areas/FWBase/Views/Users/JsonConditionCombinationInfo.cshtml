@@ -1,0 +1,64 @@
+﻿@{
+    /**/
+
+    Response.ContentType = "application/json";
+}
+[
+    {
+        "id":"USER_ID",
+        "text":"登陆账号",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"USER_NAME",
+        "text":"用户名称",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"COMPANY_ID",
+        "text":"所属单位编号",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"COMPANY_ID_V_D_FW_COMP__MC",
+        "text":"所属单位名称",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"ROLES_ID",
+        "text":"系统角色",
+        "ctl_type":"dicshort",
+        "options":{
+            "url": "JsonDicShort?dic=V_D_FW_S_ROLES"
+        }
+    },
+    {
+        "id":"ADDR",
+        "text":"联系地址",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"TEL",
+        "text":"联系电话",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"EMAIL",
+        "text":"电子邮箱",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"DISABLED",
+        "text":"状态",
+        "ctl_type":"dicshort",
+        "options":{
+            "url": "JsonDicShort?dic=D_STATE"
+        }
+    },
+    {
+        "id":"CREATE_ON",
+        "text":"录入时间",
+        "ctl_type":"datebox",
+        "options":{}
+    }
+]

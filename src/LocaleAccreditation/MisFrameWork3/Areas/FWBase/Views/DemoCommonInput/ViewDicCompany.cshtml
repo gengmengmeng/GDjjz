@@ -1,0 +1,34 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutViewDiclarge.cshtml";
+}
+<script>
+
+    function cmpDialogDic_DG_init(){
+        $('#cmpDialogDic_DG').datagrid({
+                singleSelect: true,
+                pagination: true,
+                rownumbers: true,
+                remoteSort: true,
+                height: "360px",
+                width: "665px",
+                toolbar: "#toolbarDialogDic_DG",
+                @* __TIPS__ *: 以下同表格中显示的每列的配置信息 *@
+                columns: [[
+                { field: 'NAME', title: '登陆账号', width: 180 },
+                { field: 'TYPE_D_COMPANY_TYPE__MC', title: '用户名称', width: 120 },
+                { field: 'COMPANY_CODE', title: '联系电话1', width: 110 },
+                { field: 'ADDR_REG', title: '联系电话2', width: 110 },
+                {
+                    field: 'DISABLED', title: '状态', width: 70, align: 'center', sortable: true,
+                    formatter: function (d) {
+                        if (d == 1)
+                            return '<span class="label label-danger" >停用</span>';
+                        else
+                            return '<span class="label label-success">启用</span>';
+                    }
+                }
+            ]]
+        });
+    }
+</script>
+

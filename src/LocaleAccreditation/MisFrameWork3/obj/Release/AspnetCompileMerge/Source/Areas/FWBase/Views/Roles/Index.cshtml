@@ -1,0 +1,295 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutStdConditionCombinationQuery.cshtml";
+    //__TIPS__*: 
+    //下面这行可以定义查询项中是否包含日期查询框，如果查询不需要日期的，可以没注释这句。
+    ViewBag.DateRangeType = new string[] { "创建日期" };
+    //系统默认是不允许删除记录的，如果要显示查询界面的删除按钮，就开启这句
+    ViewBag.ShowDeleteButton = false;
+    ViewBag.ShowChangeStateButton = true;
+    ViewBag.HideCommonButtons = true;
+
+    //以下这些语句设置按钮的状态，也可以Controller里根据权限进行配置
+    ViewBag.DisableBTN_Add = false;
+    ViewBag.DisableBTN_Edit = false;
+    ViewBag.DisableBTN_Delete = false;
+    ViewBag.DisableBTN_Disable = false;
+    ViewBag.DisableBTN_Enable = false;
+}
+<div id="winMainForm"></div>
+<script>
+    function btnAddEvent() {
+        $('#winMainForm').dialog({
+            title: '增加信息',
+            width: 670,//窗体边框12,加上内部div的边距20
+            height: 450,
+            top: 5,
+            closed: false,
+            cache: false,
+            striped: true,
+            'dg': $('#cmpDG'),
+            href: "@Url.Action("ViewFormAdd", "Roles")",
+            modal: true,
+            onLoad: function () {
+                $("#cmpMenu").tree({
+                    "url": "JsonMenuData",
+                    checkbox: true,
+                });
+            },
+            buttons: [
+                {
+                    id: 'btnForm_OK',
+                    text: '保存',
+                    iconCls: 'icon-ok',
+                },
+                {
+                text: '取消',
+                    iconCls: 'icon-cancel',
+                    handler: function (e) {
+                        $('#winMainForm').dialog("close");
+                    }
+                },
+            ]
+        });
+    }
+
+    function btnEditEvent() {
+        var selectRow = $('#cmpDG').datagrid("getSelected");
+        if (selectRow == null || selectRow == undefined) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '请选择一条要 【编辑】 的记录'
+            });
+            return;
+        }
+        $('#winMainForm').dialog({
+            title: '修改信息 【' + selectRow.ID+'】',
+            width: 670,//窗体边框12,加上内部div的边距20
+            height: 450,
+            top: 5,
+            closed: false,
+            cache: false,
+            'dg': $('#cmpDG'),
+            href: "@Url.Action("ViewFormEdit", "Roles")",
+            modal: true,
+            onLoad: function () {
+                //加载录入项     
+                $("#OBJECT_ID").val(selectRow.ID);
+                $("#cmpMenu").tree({
+                    "url": "JsonMenuData?OBJECT_ID=" + selectRow.ID,
+                    checkbox: true,
+                });
+            },
+            buttons: [
+                {
+                    id: 'btnForm_OK',
+                    text: '保存',
+                    iconCls: 'icon-ok',
+                },
+                {
+                    text: '取消',
+                    iconCls: 'icon-cancel',
+                    handler: function (e) {
+                        $('#winMainForm').dialog("close");
+                    }
+                },
+                    
+            ]
+        });
+    }
+
+    function btnRemoveEvent() {
+            
+    }
+
+    function btnDisableEvent() {
+        var selectRow = $('#cmpDG').datagrid("getSelected");
+        if (selectRow == null || selectRow == undefined) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '请选择一条要 【停用】 的记录'
+            });
+            return;
+        }
+        if (selectRow.DISABLED == 1) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '已是【停用】状态'
+            });
+            return;
+        }
+        $.messager.confirm({
+            icon: 'question',
+            title: '询问',
+            width: '400px',
+            msg: '您确定要停用ID为【' + selectRow.ID + '】的角色 【' + selectRow.ROLE_NAME + '】？',
+            fn: function (r) {
+                if (r) {
+                    $.ajax({
+                        url: "@Url.Action("ActionChangeState", "Roles")",
+                        data: {
+                            "OBJECT_ID": selectRow.ID,
+                            "state":1
+                        },
+                        success:function(data) {
+                            console.log(data);
+                            if (data.success) {
+                                $('#cmpDG').datagrid("reload");
+                            }
+                            else {
+                                $.messager.alert({
+                                    icon: 'error',
+                                    title: '提示',
+                                    msg: data.message
+                                });
+                            }
+                        },
+                        error: function (data) {
+
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    function btnEnableEvent() {
+        var selectRow = $('#cmpDG').datagrid("getSelected");
+        if (selectRow == null || selectRow == undefined) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '请选择一条要 【启用】 的记录'
+            });
+            return;
+        }
+        if (selectRow.DISABLED == 0) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '已是【启用】状态'
+            });
+            return;
+        }
+        $.ajax({
+            url: "@Url.Action("ActionChangeState", "Roles")",
+            data: {
+                "OBJECT_ID": selectRow.ID,
+                "state":0
+            },
+            success:function(data) {
+                console.log(data);
+                if (data.success) {
+                    $('#cmpDG').datagrid("reload");
+                }
+                else {
+                    $.messager.alert({
+                        icon: 'error',
+                        title: '提示',
+                        msg: data.message
+                    });
+                }
+            },
+            error: function (data) {
+                alert(data);
+            }
+        });
+    }
+    $(function () {
+    $('#cmpDG').datagrid({
+        url: 'JsonDataList',
+        singleSelect:true,
+        pagination: true,
+        rownumbers: true,
+        remoteSort: true,
+        striped: true,
+        onDblClickRow: function (index, field, value) {
+            $("#stdBtnEdit").click();
+        },
+        //toolbar: "#cmpDgToolBar",
+        columns: [[
+            //{ field: 'ID', title: '标识', width: 80, sortable: true},
+            { field: 'ROLE_NAME', title: '角色名称', width: 200, align: 'center', sortable: true },
+            { field: 'SORT_CODE', title: '排序编号', width: 120, align: 'center', sortable: true },
+            { field: 'CREATE_BY', title: '创建用户', width: 120, align: 'center', sortable: true },
+            {
+                field: 'CREATE_ON', title: '创建时间', width: 150, align: 'center', sortable: true,
+                formatter: function (d) {
+                    return moment(d).format("YYYY-MM-DD HH:mm");
+                }
+            },
+            { field: 'UPDATE_BY', title: '最后编辑用户', align: 'center',width: 200 },
+            {
+                field: 'UPDATE_ON', title: '更新时间', width: 200, align: 'center',sortable: true,
+                formatter: function (d) {
+                    return moment(d).format("YYYY-MM-DD HH:mm");
+                }
+            },
+            {
+                field: 'DISABLED', title: '状态', width: 100, align: 'center', sortable: true,
+                formatter: function (d) {
+                    if (d == 1)
+                        return '<span class="label label-danger" >停用</span>';
+                    else
+                        return '<span class="label label-success">启用</span>';
+                }
+            }
+        ]]
+    });
+
+    //初始化分页栏按钮,增加导出Excel功能
+    var pager = $("#cmpDG").datagrid().datagrid('getPager')
+    pager.pagination({
+        buttons: [
+            {
+                text: '导出',
+                iconCls: 'icon-table-export',
+                handler: function () {
+                    var data = {};
+                    data.Search = $("#search").textbox("getValue");
+                    data.date_range_type = $("#date_range_type").combobox("getValue");
+                    data.start_date = $("#start_date").datebox("getValue");
+                    data.end_date = $("#end_date").datebox("getValue");
+                    var result = {};
+                    var aa = $("#ttCdtResult").tree("getRoot");
+                    if (aa != null) {
+                        createConditionCombination(result, aa);
+                        var base = new Base64();
+                        var b64 = base.encode(JSON.stringify(result));
+                        data.cdt_combination = b64;
+                    }
+                    ef3.datagridToExcel(data);
+                }
+            }@*,
+            {
+                text: '打印',
+                iconCls: 'icon-table-export',
+                handler: function () {
+                    var data = {};
+                    data.title = "打印角色权限报表";
+                    data.Search = $("#search").textbox("getValue");
+                    data.date_range_type = $("#date_range_type").combobox("getValue");
+                    data.start_date = $("#start_date").datebox("getValue");
+                    data.end_date = $("#end_date").datebox("getValue");
+                    var result = {};
+                    var aa = $("#ttCdtResult").tree("getRoot");
+                    if (aa != null) {
+                        createConditionCombination(result, aa);
+                        var base = new Base64();
+                        var b64 = base.encode(JSON.stringify(result));
+                        data.cdt_combination = b64;
+                    }
+                    console.log(data);
+                    var url='@Url.Action("ActionPrint", "Roles")';
+                    $.print(url, data);
+                }
+            }*@
+        ]
+        });
+    });
+</script>
+

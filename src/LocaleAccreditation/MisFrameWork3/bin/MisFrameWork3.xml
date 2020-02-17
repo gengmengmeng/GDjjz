@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MisFrameWork3</name>
+    </assembly>
+    <members>
+        <member name="M:MisFrameWork3.Areas.FWBase.Controllers.FWServicesController.JsonUploadFile">
+            <summary>
+            接收参数：
+                Request.Files["imgFile"]
+                Request.QueryString["dir"]
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MisFrameWork3.Areas.FWBase.Controllers.RolesController.HaveAuthority(System.Collections.Generic.List{MisFrameWork.core.UnCaseSenseHashTable},System.String)">
+            <summary>
+            判断是否具备oprate权限
+            </summary>
+            <param name="authority"></param>
+            <param name="oprate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MisFrameWork3.Classes.Controller.FWBaseController.QueryDataFromEasyUIDataGrid(System.String,System.String,System.String,MisFrameWork.core.db.Condition,System.String)">
+            <summary>
+            基础框架的数据查询函数
+            </summary>
+            <param name="tableName">要查询的表名</param>
+            <param name="dataRangeFields">时间段查询条件支持的字段</param>
+            <param name="conditionFields">参与查询的字段名</param>
+            <param name="externalCondition">附加的条件，比如有些查询要过滤只查本人信息的，可以设置这个参数</param>
+            <param name="returnFields">查询结果返回的字段列表</param>
+            <returns></returns>
+        </member>
+        <member name="T:MisFrameWork3.Classes.DbListener.BeforeInsertGeneratePKFromTable">
+            <summary>
+            主要以设置Rule属性为主。
+            Rule的规则：{日期格式}或[记录的字段]或(序号的长度)
+            比如想要设置一种“A+单位名称+输入日期+5位序号”可以这样设置
+            A[LRDW]{yyyyMMdd}(5)
+            </summary>
+        </member>
+        <member name="T:MisFrameWork3.Classes.DbListener.BeforeInsertLoadOracleSequence">
+            <summary>
+            Oracle 专用，因为Oracle里没有自增类型的字段，因此，如果需要使用自动特性，应该使用
+            Sequence 实现，这个类就是在插入数据之前，判断有没有调置主键的值，如果没有就读取
+            名称为“SEQ_【表名】”的Sequence的值作为主键值。
+            </summary>
+        </member>
+        <member name="P:MisFrameWork3.Classes.DbListener.BeforeInsertLoadOracleSequence.AutoAffect">
+            <summary>
+            自动处理ID名相同的主键
+            </summary>
+        </member>
+        <member name="P:MisFrameWork3.Classes.Membership.FWUserInfo.RoleLevel">
+            <summary>
+            角色级别，越小角色等级越高，小的等级不能修改大等级的权限
+            </summary>
+        </member>
+        <member name="M:MisFrameWork3.Classes.Membership.FWUserInfo.CheckLoginedFlags">
+            <summary>
+            用于需要验证单点登陆的业务
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:AutoUpdateWeb.Class.GVar.PlanFloder">
+            <summary>
+            更新文件目录
+            </summary>
+        </member>
+        <member name="P:AutoUpdateWeb.Class.GVar.LocalOnly">
+            <summary>
+            是否只能从服务器本地登录
+            </summary>
+        </member>
+        <member name="P:AutoUpdateWeb.Class.GVar.LoginUser">
+            <summary>
+            登录用户
+            </summary>
+        </member>
+        <member name="P:AutoUpdateWeb.Class.GVar.LoginPwd">
+            <summary>
+            登录密码
+            </summary>
+        </member>
+    </members>
+</doc>

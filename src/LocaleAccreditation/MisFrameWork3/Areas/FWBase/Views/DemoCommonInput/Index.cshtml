@@ -1,0 +1,248 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutStdQuery.cshtml";
+    //__TIPS__*: 
+    //下面这行可以定义查询项中是否包含日期查询框，如果查询不需要日期的，可以没注释这句。
+    ViewBag.DateRangeType = new string[] { "创建日期", "修改日期" };
+    //系统默认是不允许删除记录的，如果要显示查询界面的删除按钮，就开启这句
+    ViewBag.ShowDeleteButton = true;
+    ViewBag.ShowChangeStateButton = true;
+
+    //以下这些语句设置按钮的状态，也可以Controller里根据权限进行配置
+    ViewBag.DisableBTN_Add = false;
+    ViewBag.DisableBTN_Edit = false;
+    ViewBag.DisableBTN_Delete = true;
+    ViewBag.DisableBTN_Disable = false;
+    ViewBag.DisableBTN_Enable = false;
+
+}
+<div id="winMainForm"></div>
+<script>
+    function btnAddEvent() {
+        $('#winMainForm').dialog({
+            title: '增加信息',
+            width: 720,//窗体边框12,加上内部div的边距20
+            height: 480,
+            top: 5,
+            closed: false,
+            cache: false,
+            striped: true,
+            @* __TIPS__: 这里是点击【增加】按钮时，窗体内容的加载的地址，要与控制器同名，取框架默认值的话就不需要修改，如果用绝地址就用@Url.Action("函数", "控制器")的方式 *@
+            href: "ViewFormAdd",
+            modal: true,
+            onLoad: function () {
+            },
+            buttons: [
+                {
+                    id: 'btnForm_OK',
+                    text: '保存',
+                    iconCls: 'icon-ok',
+                },
+                {
+                text: '取消',
+                    iconCls: 'icon-cancel',
+                    handler: function (e) {
+                        $('#winMainForm').dialog("close");
+                    }
+                },
+            ]
+        });
+    }
+
+    function btnEditEvent() {
+        var selectRow = $('#cmpDG').datagrid("getSelected");
+        if (selectRow == null || selectRow == undefined) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '请选择一条要 【编辑】 的记录'
+            });
+            return;
+        }
+        $('#winMainForm').dialog({
+            title: '修改信息 【' + selectRow.ID+'】',
+            width: 720,//窗体边框12,加上内部div的边距20
+            height: 480,
+            top: 5,
+            closed: false,
+            cache: false,
+            @* __TIPS__: 这里是点击【修改】按钮时，窗体内容的加载的地址，要与控制器同名，取框架默认值的话就不需要修改，如果用绝地址就用@Url.Action("函数", "控制器") 的方式 *@
+            href: "ViewFormEdit",
+            modal: true,
+            onLoad: function () {
+                //加载录入项
+                $("#OBJECT_ID").val(selectRow.ID);
+            },
+            buttons: [
+                {
+                    id: 'btnForm_OK',
+                    text: '保存',
+                    iconCls: 'icon-ok',
+                },
+                {
+                    text: '取消',
+                    iconCls: 'icon-cancel',
+                    handler: function (e) {
+                        $('#winMainForm').dialog("close");
+                    }
+                },
+
+            ]
+        });
+    }
+
+    function btnRemoveEvent() {
+
+    }
+
+    function btnDisableEvent() {
+        var selectRow = $('#cmpDG').datagrid("getSelected");
+        if (selectRow == null || selectRow == undefined) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '请选择一条要 【停用】 的记录'
+            });
+            return;
+        }
+        if (selectRow.DISABLED == 1) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '已是【停用】状态'
+            });
+            return;
+        }
+        $.messager.confirm({
+            icon: 'question',
+            title: '询问',
+            width: '400px',
+            @* __TIPS__*: 这里是要根据实际数据结构提示相应的信息 *@
+            msg: '您确定要停用【' + selectRow.ID + '】【' + selectRow.NAME + '】？',
+            fn: function (r) {
+                if (r) {
+                    $.ajax({
+                        @* __TIPS__: 这里是提交数据的地址地址，最好使用同名，如果用绝地址就用@Url.Action("函数", "控制器") 的方式 *@
+                        url: "ActionChangeState",
+                        data: {
+                            @* __TIPS__: 根据实际数据结构传入主键 *@
+                            "OBJECT_ID": selectRow.ID,
+                            "state":1
+                        },
+                        success:function(data) {
+                            console.log(data);
+                            if (data.success) {
+                                $('#cmpDG').datagrid("reload");
+                            }
+                            else {
+                                $.messager.alert({
+                                    icon: 'error',
+                                    title: '提示',
+                                    msg: data.message
+                                });
+                            }
+                        },
+                        error: function (data) {
+
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    function btnEnableEvent() {
+        var selectRow = $('#cmpDG').datagrid("getSelected");
+        if (selectRow == null || selectRow == undefined) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '请选择一条要 【启用】 的记录'
+            });
+            return;
+        }
+        if (selectRow.DISABLED == 0) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '已是【启用】状态'
+            });
+            return;
+        }
+        $.ajax({
+            url: "ActionChangeState",
+            data: {
+                @* __TIPS__: 根据实际数据结构传入主键 *@
+                "OBJECT_ID": selectRow.ID,
+                "state":0
+            },
+            success:function(data) {
+                console.log(data);
+                if (data.success) {
+                    $('#cmpDG').datagrid("reload");
+                }
+                else {
+                    $.messager.alert({
+                        icon: 'error',
+                        title: '提示',
+                        msg: data.message
+                    });
+                }
+            },
+            error: function (data) {
+                alert(data);
+            }
+        });
+    }
+
+    $('#cmpDG').datagrid({
+        url: 'JsonDataList',
+        singleSelect:true,
+        pagination: true,
+        rownumbers: true,
+        remoteSort: true,
+        striped: true,
+        //toolbar: "#cmpDgToolBar",
+        @* __TIPS__*: 以下同表格中显示的每列的配置信息 *@
+        frozenColumns: [[
+            { field: 'NAME', title: '名称', width: 120 },
+            { field: 'COMPANY_ID_V_D_FW_COMPANIES__MC', title: '所属单位', width: 220 },
+            {
+                field: 'DISABLED', title: '状态', width: 70, align: 'center', sortable: true,
+                formatter: function (d) {
+                    if (d == 1)
+                        return '<span class="label label-danger" >停用</span>';
+                    else
+                        return '<span class="label label-success">启用</span>';
+                }
+            }
+        ]],
+        columns: [[            
+            { field: 'S_DIC1', title: '短字典1_值 ', width: 80 },
+            { field: 'S_DIC1_D_MZ__MC', title: '短字典1_描述', width: 100 },
+            { field: 'S_DIC2', title: '短字典2_值', width: 80 },
+            { field: 'S_DIC2_D_NY__MC', title: '短字典2_描述', width: 100 },
+            { field: 'S_DICM', title: '短字典多选_值', width: 80 },
+            { field: 'S_DICM_D_MZ__MC', title: '短字典多选_描述', width: 100 },
+            { field: 'L_DIC1', title: '长字典值1', width: 80 },
+            { field: 'L_DIC1_D_MZ__MC', title: '长字典描述1', width: 180 },
+            { field: 'L_DIC2', title: '长字典值2', width: 80 },
+            { field: 'L_DIC2_D_MZ__MC', title: '长字典描述2', width: 180 },
+            {
+                field: 'REG_DATE', title: '日期', width: 120, sortable: true,
+                formatter: function (d) {
+                    return moment(d).format("YYYY-MM-DD");
+                }
+            },
+            {
+                field: 'REG_DATE_TIME', title: '日期时间', width: 140, sortable: true,
+                formatter: function (d) {
+                    return moment(d).format("YYYY-MM-DD HH:mm");
+                }
+            }
+
+        ]]
+    });    
+</script>
+

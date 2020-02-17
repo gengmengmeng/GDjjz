@@ -1,0 +1,157 @@
+﻿<div class="easyui-tabs" style="height:480px;">
+    <div title="动态信息" style="padding:10px;display:none;">
+        <div>更新时间还有：<span id="showMsg">0</span></div>
+        <div style="width:400px;float:left">
+            <canvas id="barChart1" width="100" height="100">您的浏览器不支持图表功能</canvas>
+        </div>
+        <div style="width:400px;float:left;padding-left:70px">
+            <canvas id="pieChart1" width="100" height="100">您的浏览器不支持图表功能</canvas>
+        </div>
+    </div>
+    <div title="静态示例 " style="overflow:auto;padding:10px;display:none;">
+        <div style="width:400px;float:left">
+            <canvas id="barChart2" width="100" height="100">您的浏览器不支持图表功能</canvas>
+        </div>
+        <div style="width:400px;float:left;padding-left:70px">
+            <canvas id="pieChart2" width="100" height="100">您的浏览器不支持图表功能</canvas>
+        </div>
+    </div>
+</div>
+
+@*<script src="/Scripts/chart/Chart.min.js""></script>*@
+<script>
+    //var ctx = document.getElementById("myChart").getContext('2d');
+    //chartColorArray = [
+    //    'rgba(255, 200, 230, 0.5)',
+    //    'rgba(255, 200, 180, 0.5)',
+    //    'rgba(255, 200, 80, 0.5)',
+    //    'rgba(255, 200, 30, 0.5)',
+    //    'rgba(255, 120, 230, 0.5)',
+    //    'rgba(255, 30, 230, 0.5)',
+    //    'rgba(255, 120, 180, 0.5)',
+    //    'rgba(255, 30, 180, 0.5)',
+    //]
+    //var ctx = $("#barChart2");
+    //var myChart = new Chart(ctx, {
+    //    type: 'bar',
+    //    data: {
+    //        labels: ["广州", "深圳", "东莞", "珠海", "江门", "清远"],
+    //        datasets: [
+    //            {
+    //                label: '平均每日业务量',
+    //                data: [1234, 289, 100, 1531, 987, 765],
+    //                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+    //                borderColor: 'rgba(54, 162, 235, 1)',
+    //                borderWidth: 1
+    //            },
+    //            {
+    //                label: '当前业务量',
+    //                data: [900, 190, 38, 55, 20, 32],
+    //                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+    //                borderColor: 'rgba(255,99,132,1)',
+    //                borderWidth: 1
+    //            }
+    //        ]
+    //    },
+    //    options: {
+    //        scales: {
+    //            yAxes: [{
+    //                ticks: {
+    //                    beginAtZero: true
+    //                }
+    //            }]
+    //        }
+    //    }
+    //});
+    ////饼图
+    //var ctx = $("#pieChart2");
+    //var myChart = new Chart(ctx, {
+    //    type: 'pie',
+    //    data: {
+    //        labels: ["广州", "深圳", "东莞", "珠海", "江门", "清远"],
+    //        datasets: [
+    //            {
+    //                data: [9, 19, 3, 5, 2, 3],
+    //                backgroundColor: chartColorArray,
+    //                borderWidth: 1
+    //            }
+    //        ]
+    //    },
+    //    options: {
+    //        scales: {
+    //            yAxes: [{
+    //                ticks: {
+    //                    beginAtZero: true
+    //                }
+    //            }]
+    //        }
+    //    }
+    //});
+
+    //动态加载数据
+    //function updateChart() {
+    //    if ($("#showMsg").text() != "0") {
+    //        var n = parseInt($("#showMsg").text());
+    //        n--;
+    //        $("#showMsg").text(n);
+    //        return;
+    //    }
+    //    $("#showMsg").text("10");
+        //柱状图
+        //$.getJSON("JsonBarChartData?d=" + new Date(),
+        //    function (d) {
+        //        console.log(d);
+        //        var ctx = $("#barChart1");
+        //        var myChart = new Chart(ctx, {
+        //            type: 'bar',
+        //            data: d,
+        //            options: {
+        //                scales: {
+        //                    yAxes: [{
+        //                        ticks: {
+        //                            beginAtZero: true
+        //                        }
+        //                    }]
+        //                }
+        //            }
+        //        });
+        //    });
+
+        //饼图
+        //$.getJSON("JsonPieChartData?getlabel=1&d=" + new Date(),
+        //    function (dLabels) {
+        //        $.getJSON("JsonPieChartData?d=" + new Date(),
+        //            function (dData) {
+        //                var ctx = $("#pieChart1");
+        //                var myChart = new Chart(ctx, {
+        //                    type: 'pie',
+        //                    data: {
+        //                        labels: dLabels,
+        //                        datasets: [
+        //                            {
+        //                                data: dData,
+        //                                backgroundColor: chartColorArray,
+        //                                borderWidth: 1
+        //                            }
+        //                        ]
+        //                    },
+        //                    options: {
+        //                        scales: {
+        //                            yAxes: [{
+        //                                ticks: {
+        //                                    beginAtZero: true
+        //                                }
+        //                            }]
+        //                        }
+        //                    }
+        //                });
+        //            }
+        //        );
+        //    }
+        //);
+
+    //}
+    //updateChart();
+    ////保持 Session 有效
+    //setInterval(updateChart, 1000);
+</script>

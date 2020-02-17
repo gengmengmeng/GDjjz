@@ -1,0 +1,517 @@
+﻿
+@{
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render(new string[]
+    {
+        "~/Content/font-awesome.css",
+        "~/Scripts/jeasyui/themes/"+Request.Cookies["theme"].Value+"/easyui.css",
+        "~/Scripts/jeasyui/themes/icon.css",
+        "~/Scripts/jeasyui/themes/color.css",
+        "~/Scripts/kindeditor/themes/default/default.css",
+        "~/Scripts/kindeditor/plugins/code/prettify.css",
+        "~/Content/Site.css"
+    })
+
+    @Scripts.Render(new string[]
+    {
+        "~/Scripts/fw_plugins/base64.js",
+        "~/Scripts/jquery-3.3.1.min.js",
+        "~/Scripts/jquery.validate.min.js",
+        "~/Scripts/moment.min.js",
+        "~/Scripts/moment-with-locales.min.js",
+        "~/Scripts/jeasyui/jquery.easyui.min.js",
+        "~/Scripts/jeasyui/datagrid-detailview.js",
+        "~/Scripts/jeasyui/locale/easyui-lang-zh_CN.js",
+        "~/Scripts/kindeditor/kindeditor-all.js",
+        "~/Scripts/kindeditor/lang/zh-CN.js",
+        "~/Scripts/misframework3.js",
+        "~/Scripts/fw_plugins/export_datagrid.js",
+        "~/Scripts/fw_plugins/framework-ui.js"
+
+    })
+
+</head>
+<body>
+    <div class="easyui-layout" data-options="fit:true">
+        <div data-options="region:'north',title:'',border:false,split:false" style="height:36px;margin-top:8px;">
+            <div id="cmpDgToolBar">
+                <div id="cmpDgToolBar_Left" style="float:left">
+                    @if (ViewBag.HideCommonButtons == null || !ViewBag.HideCommonButtons)
+                    {
+                        <a id="stdBtnAdd" href="#" onclick="btnAddEvent()" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:false,disabled:@(ViewBag.DisableBTN_Add!=null && ViewBag.DisableBTN_Add?"true":"false")">增加</a>
+                        @*<a id="stdBtnEdit" href="#" onclick="btnEditEvent()" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:false,disabled:@(ViewBag.DisableBTN_Edit!=null && ViewBag.DisableBTN_Edit?"true":"false")">修改</a>*@
+                        if (ViewBag.ShowDeleteButton != null && ViewBag.ShowDeleteButton)
+                        {
+                            <a id="stdBtnDelete" href="#" onclick="btnRemoveEvent()" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:false,disabled:@(ViewBag.DisableBTN_Delete != null && ViewBag.DisableBTN_Delete ? "true" : "false")">删除</a>
+                        }
+
+                        if (ViewBag.ShowChangeStateButton != null && ViewBag.ShowChangeStateButton)
+                        {
+                            <span class="datagrid-btn-separator" style="vertical-align: middle;display:inline-block;float:none"></span>
+                            <a href="#" onclick="btnDisableEvent()" class="easyui-linkbutton" data-options="iconCls:'icon-no',plain:false,disabled:@(ViewBag.DisableBTN_Disable != null && ViewBag.DisableBTN_Disable ? "true" : "false")">停用</a>
+                            <a href="#" onclick="btnEnableEvent()" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:false,disabled:@(ViewBag.DisableBTN_Enable != null && ViewBag.DisableBTN_Enable ? "true" : "false")">启用</a>
+                        }
+                    }
+                </div>
+                <div id="cmpDgToolBar_Right" style="float:right">
+                    @if (ViewBag.DateRangeType != null)
+                    {
+                        <select id="date_range_type" class="easyui-combobox" name="date_rang_type" style="width:120px;">
+                            <option value="0">不过滤</option>
+                            @for (var i = 1; i <= ViewBag.DateRangeType.Length; i++)
+                            {
+                                <option value="@i">@ViewBag.DateRangeType[i - 1]</option>
+                            }
+                        </select>
+                    }
+                    @if (ViewBag.DateRangeType != null)
+                    {
+                        <text>
+                            <input id="start_date" type="text" class="easyui-datebox" style="width:120px" data-options="prompt:'领卡时间'">
+                            至
+                            <input id="end_date" type="text" class="easyui-datebox" style="width:120px" data-options="prompt:'领卡时间'">
+
+                        </text>
+                    }
+                    <input id="search" class="easyui-textbox" data-options="prompt:'查询内容'" style="width:150px">
+                    <a href="#" onclick="btnSearchEvent()" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:false"></a>
+                    <a id="btnShowCdtComb" href="#" onclick="btnShowCdtCombination()" class="easyui-linkbutton" data-options="iconCls:'',plain:false"><span class=" fa fa-ellipsis-h"></span></a>
+                </div>
+            </div>
+        </div>
+        <div id="dialogCdtCombination">
+            <div style="padding-top:5px;padding-left:5px">
+                <span>
+                    <select id="ccCdtRelate" class="easyui-combobox" style="width:70px;">
+                        <option value="AND">AND</option>
+                        <option value="OR">OR</option>
+                    </select>
+                </span>
+                <span><input id="ccCdtList" style="width:110px;" /></span>
+                <span><input id="ccCdtOprator" /></span>
+                <span id="spanCdtValue"><input id="ctlCdtValue" class="easyui-textbox" style="width:140px;" /></span>
+                <input id="cdtCtlType" type="hidden" />
+                <a href="#" onclick="btnAddCdt()" class="easyui-linkbutton" data-options="iconCls:'',plain:false"><span class="fa fa-plus">条件</span></a>
+                <a href="#" onclick="btnAddGroup()" class="easyui-linkbutton" data-options="iconCls:'',plain:false"><span class="fa fa-plus">分组</span></a>
+                <a href="#" onclick="btnRemoveCondition()" class="easyui-linkbutton" data-options="iconCls:'',plain:false"><span class="fa fa-remove">节点</span></a>
+            </div>
+            <div style="padding:10px 10px 0 10px">
+                <div class="easyui-panel" title="条件节点信息"
+                     style="width:100%;height:200px;"
+                     data-options="">
+                    <ul id="ttCdtResult" class="easyui-tree"></ul>
+                </div>
+            </div>
+            <div style="padding:3px 10px 5px 10px">
+                <input id="tbCdtCombinationResult" class="easyui-textbox" style="width:83%" data-options="
+                editable:false,prompt:'条件组合结果',
+                multiline:true,height:80,
+                " />
+                <a href="#" onclick="btnQueryByCDTCombination()" style="width:15%" class="easyui-linkbutton" data-options="iconCls:'',height:80,plain:false"><span class="fa fa-search">查询</span></a>
+            </div>
+        </div>
+
+        <div data-options="region:'center',title:'',border:false">
+            <table id="cmpDG" class="easyui-datagrid" fit="true"></table>
+        </div>
+        <div id="dialogDic"></div>
+        @* 组合查询*@
+        @RenderBody()
+        </div>
+</body>
+</html>
+<script>
+    CONDITION_INDEX = 0;
+    function btnQueryByCDTCombination() {
+        var result = {};
+        createConditionCombination(result, $("#ttCdtResult").tree("getRoot"));
+        var base = new Base64();
+        var b64 = base.encode(JSON.stringify(result));  
+        var params = {
+            cdt_combination: b64
+        };
+        $('#cmpDG').datagrid("load",params);
+    }
+    function calculateConditionDescript(cdtInfo) {
+        var result = "";
+        if (cdtInfo.conditions != undefined && cdtInfo.conditions.length > 0) {            
+            var firstCdt = "";
+            var cdtIndex = 0;
+            for (cdtIndex = 0; cdtIndex < cdtInfo.conditions.length; cdtIndex++) {
+                var d = calculateConditionDescript(cdtInfo.conditions[cdtIndex]);
+                result += " ("+d;
+                if (d != "") 
+                    break;
+            }
+            for (cdtIndex++; cdtIndex < cdtInfo.conditions.length; cdtIndex++) {
+                var d = calculateConditionDescript(cdtInfo.conditions[cdtIndex]);
+                result += " " + cdtInfo.conditions[cdtIndex].relate + " " + d;
+            }
+            if (result!="")
+                result += ")";
+        }
+        else {
+            return (cdtInfo.descript != undefined) ? cdtInfo.descript:"";
+        }
+        return result;
+    }
+    function createConditionCombination(result, node) {
+        if (node.is_group) {
+            //console.log("组"+depth+"：" + node.domId + "," + node.text);
+            var subNode = $("#ttCdtResult").tree("getChildren", node.target);
+            var objArray = [];
+            for (var a = 0; a < subNode.length; a++) {
+                var subResult = {};
+                var parent = $("#ttCdtResult").tree("getParent", subNode[a].target);
+                if (parent.domId != node.domId) {
+                    //console.log("过滤掉：" + subNode[a].domId);
+                    continue;
+                }
+                createConditionCombination(subResult, subNode[a]);
+                objArray.push(subResult);
+            }
+            result.not = false;
+            result.relate = node.cdt_relate;
+            result.conditions = objArray;
+        }
+        else {
+            //console.log("节点：" + node.domId+","+ node.text);
+            result.not = node.cdt_field_info.not;
+            result.relate = node.cdt_field_info.relate;
+            result.t_relate = node.cdt_field_info.t_relate;
+            result.src = node.cdt_field_info.src;
+            result.t_src = node.cdt_field_info.t_src;
+            result.op = node.cdt_field_info.op;
+            result.tag = node.cdt_field_info.tag;
+            result.t_tag = node.cdt_field_info.t_tag;
+            result.descript = node.cdt_field_info.descript;
+        }
+    }
+    
+    function btnRemoveCondition() {
+        var node = $("#ttCdtResult").tree("getSelected");
+        if (node.id == "root") {
+            alert("不能删除根节点");
+            return;
+        }
+        $("#ttCdtResult").tree("remove", node.target);
+        var result = {};
+        createConditionCombination(result, $("#ttCdtResult").tree("getRoot"));
+        console.log(result);
+        $("#tbCdtCombinationResult").textbox("setValue", calculateConditionDescript(result));
+    }
+    function btnAddCdt() {
+        var d = $("#ttCdtResult").tree("getSelected");
+        if ($("#ccCdtRelate").combobox("getValue") == "") {
+            alert("请选择条件关系");
+            return;
+        }
+        if ($("#ccCdtList").combobox("getValue") == "") {
+            alert("请选择条件字段");
+            return;
+        }
+        if ($("#ccCdtOprator").combobox("getValue") == "") {
+            alert("请选择条件操作");
+            return;
+        }        
+        var fieldInfo = {};
+        fieldInfo.not = "false";
+        fieldInfo.relate = $("#ccCdtRelate").combobox("getValue");
+        fieldInfo.t_relate = $("#ccCdtRelate").combobox("getValue");
+        fieldInfo.src = $("#ccCdtList").combobox("getValue");
+        fieldInfo.t_src = $("#ccCdtList").combobox("getText");
+        fieldInfo.op = $("#ccCdtOprator").combobox("getValue");
+        fieldInfo.t_op = $("#ccCdtOprator").combobox("getText");
+        
+        var ctlType = $("#cdtCtlType").val(); 
+        if (ctlType == 'numberbox') {
+            fieldInfo.tag = $("#ctlCdtValue").numberbox("getValue");
+            fieldInfo.t_tag = $("#ctlCdtValue").numberbox("getValue");
+            fieldInfo.cdt_data_type = "number";
+            if ($("#ctlCdtValue").numberbox("getValue") == "") {
+                alert("请选择输入条件值");
+                return;
+            }
+        }
+        else if (ctlType == 'numberspinner') {
+            fieldInfo.tag = $("#ctlCdtValue").numberspinner("getValue");
+            fieldInfo.t_tag = $("#ctlCdtValue").numberspinner("getValue");
+            fieldInfo.cdt_data_type = "number";
+            if ($("#ctlCdtValue").numberspinner("getValue") == "") {
+                alert("请选择输入条件值");
+                return;
+            }
+        }
+        else if (ctlType == 'datebox') {
+            fieldInfo.tag = $("#ctlCdtValue").datebox("getValue");
+            fieldInfo.t_tag = $("#ctlCdtValue").datebox("getValue");
+            fieldInfo.cdt_data_type = "datetime";
+            if ($("#ctlCdtValue").datebox("getValue") == "") {
+                alert("请选择输入条件值");
+                return;
+            }
+        }
+        else if (ctlType == 'datetimespinner') {
+            fieldInfo.tag = $("#ctlCdtValue").datetimespinner("getValue");
+            fieldInfo.t_tag = $("#ctlCdtValue").datetimespinner("getValue");
+            fieldInfo.cdt_data_type = "datetime";
+            if ($("#ctlCdtValue").datetimespinner("getValue") == "") {
+                alert("请选择输入条件值");
+                return;
+            }
+        }
+        else if ((ctlType == 'dicshort')) {
+            fieldInfo.tag = $("#ctlCdtValue").combobox("getValue");
+            fieldInfo.t_tag = $("#ctlCdtValue").combobox("getText");
+            fieldInfo.cdt_data_type = "string";
+            if ($("#ctlCdtValue").combobox("getValue") == "") {
+                alert("请选择输入条件值");
+                return;
+            }
+        }
+        else if ((ctlType == 'diclarge')) {
+            fieldInfo.tag = $("#ctlCdtValue").diclarge("getValue");
+            fieldInfo.t_tag = $("#ctlCdtValue").diclarge("getText");
+            fieldInfo.cdt_data_type = "string";
+            if ($("#ctlCdtValue").diclarge("getValue") == "") {
+                alert("请选择输入条件值");
+                return;
+            }
+        }
+        else {
+            fieldInfo.tag = $("#ctlCdtValue").textbox("getValue");
+            fieldInfo.t_tag = $("#ctlCdtValue").textbox("getText");
+            fieldInfo.cdt_data_type = "string";
+            if ($("#ctlCdtValue").textbox("getValue") == "") {
+                alert("请选择输入条件值");
+                return;
+            }
+        }
+        var cdtV = "【" + fieldInfo.relate + "】【" + fieldInfo.src + "】 " + fieldInfo.op + " 【" + fieldInfo.tag +"】";
+        var cdtT = "【" + fieldInfo.relate + "】【" + fieldInfo.t_src + "】 " + fieldInfo.t_op + " 【" + fieldInfo.t_tag +"】";
+        fieldInfo.descript = "【" + fieldInfo.t_src + "】 " + fieldInfo.t_op + " 【" + fieldInfo.t_tag +"】"
+        //console.log("条件值  " + cdtV);
+        //console.log("条件描述  " + cdtT);
+        var node = $("#ttCdtResult").tree("getSelected");
+        console.log(node);
+        if (node == null) {
+            alert("请选择一个节点");
+            return;
+        }
+        if (node.is_group) {
+            $('#ttCdtResult').tree('append', {
+                parent: node.target,
+                data: {
+                    id: "CONDITION_"+CONDITION_INDEX++,
+                    text: cdtT,
+                    cdt_value: cdtV,
+                    cdt_field_info: fieldInfo,
+                    is_group: false
+                }
+            });
+        }
+        else {
+            $('#ttCdtResult').tree('insert', {
+                before: node.target,
+                data: {
+                    id: "CONDITION_" + CONDITION_INDEX++,
+                    text: cdtT,
+                    cdt_value: cdtV,
+                    cdt_field_info: fieldInfo,
+                    is_group: false
+                }
+            });
+        }
+        var result = {};
+        createConditionCombination(result, $("#ttCdtResult").tree("getRoot"));
+        console.log(result);
+        $("#tbCdtCombinationResult").textbox("setValue",calculateConditionDescript(result));
+    }
+    function btnAddGroup() {
+        var node = $("#ttCdtResult").tree("getSelected");
+        if (node == null)
+            node = $("#ttCdtResult").tree("getRoot");
+        if (node != null) {
+            if (node.is_group) {
+                $('#ttCdtResult').tree('append', {
+                    parent: node.target,
+                    data: {
+                        id: "CONDITION_" + CONDITION_INDEX++,
+                        text: "条件组【" + $("#ccCdtRelate").combobox("getValue") + "】",
+                        iconCls: "fa-treenode-icon fa fa-circle",
+                        cdt_relate: $("#ccCdtRelate").combobox("getValue"),
+                        is_group: true
+                    }
+                });
+            }
+            else {
+                $('#ttCdtResult').tree('insert', {
+                    before: node.target,
+                    data: {
+                        id: "CONDITION_" + CONDITION_INDEX++,
+                        text: "条件组【" + $("#ccCdtRelate").combobox("getValue") + "】",
+                        iconCls: "fa-treenode-icon fa fa-circle",
+                        cdt_relate: $("#ccCdtRelate").combobox("getValue"),
+                        is_group: true
+                    }
+                });
+            }
+        }
+    }
+    function btnShowCdtCombination() {
+        $("#ttCdtResult").tree("loadData", [
+            {
+            "id": "root",
+            "text": "查询条件",
+            "iconCls": "fa-treenode-icon fa fa-archive",
+            "is_group": true,
+            "cdt_relate": "AND",
+            },
+        ]);
+        var rootNode = $("#ttCdtResult").tree("getRoot");
+        $("#ttCdtResult").tree("select", rootNode.target);
+        $("#dialogCdtCombination").css("height", "");
+        $("#dialogCdtCombination").window({
+            top: 2,
+            left: 500,//刚好能挡住基本的查询条件
+            width: 625,
+            height: 390,
+            iconCls: 'fa fa-search',
+            title: "组合查询条件",
+            minimizable: false,
+            maximizable: false,
+            closable: true,
+            draggable: false,
+            closed:false,
+        });
+
+        $("#ccCdtOprator").combobox({
+            valueField: 'id',
+            textField: 'text',
+            width: 80,
+            editable: false,
+        });
+        //加载查询条件
+        $("#ccCdtList").combobox({
+            url:"JsonConditionGrant",
+            valueField: 'id',
+            textField: 'text',
+            width: 110,
+            //labelWidt: 100,
+            //labelAlign: "right",
+            editable:false,
+            onSelect: function (rec) {
+                var selectIndex = 0;
+                //获取控件信息
+                var textboxOp = [
+                    { id: "eq", text: "等于" },
+                    { id: "start", text: "开始" },
+                    { id: "end", text: "结束" },
+                    { id: "contain", text: "包含" },
+                    { id: "not_contain", text: "不包含" }
+                ];
+                var numberboxOp = [
+                    { id: "eq", text: "=" },
+                    { id: "ne", text: "!=" },
+                    { id: "gt", text: ">" },
+                    { id: "lt", text: "<" },
+                    { id: "ge", text: ">=" },
+                    { id: "le", text: "<=" },
+                ];   
+                var dicboxOp = [
+                    { id: "contain", text: "包含" },
+                    { id: "not_contain", text: "不包含" }
+                ];
+                $.extend(true, rec.options, { width: 140 });
+                $("#spanCdtValue").html("<input id=\"ctlCdtValue\"/>");
+                $("#cdtCtlType").val(rec.ctl_type);
+                console.log($("#cdtCtlType").options);
+                $("#cdtCtlType").options = rec;
+                console.log("字段类型：" + rec.ctl_type);
+                if ((rec.ctl_type == 'numberbox') || (rec.ctl_type == 'datebox') || (rec.ctl_type == 'datetimespinner') || (rec.ctl_type == 'numberspinner')) {
+                    $("#ccCdtOprator").combobox("loadData", numberboxOp);
+                    $("#ccCdtOprator").combobox("setValue", numberboxOp[0].id);
+                    if (rec.ctl_type == 'numberbox')
+                        $("#ctlCdtValue").numberbox(rec.options);
+                    else if (rec.ctl_type == 'numberspinner')
+                        $("#ctlCdtValue").numberspinner(rec.options);
+                    else if (rec.ctl_type == 'datebox')
+                        $("#ctlCdtValue").datebox(rec.options);
+                    else if (rec.ctl_type == 'datetimespinner') {
+                        $("#ctlCdtValue").datetimespinner(rec.options);
+                        $("#ctlCdtValue").datetimespinner("setValue", new Date());
+                    }
+                }
+                else if (rec.ctl_type == 'dicshort') {
+                    $("#ccCdtOprator").combobox("loadData", dicboxOp);
+                    $("#ccCdtOprator").combobox("setValue", dicboxOp[0].id);
+                    $("#ctlCdtValue").dicshort(rec.options);
+                }
+                else if (rec.ctl_type == 'diclarge')
+                {
+                    $("#ccCdtOprator").combobox("loadData", dicboxOp);
+                    $("#ccCdtOprator").combobox("setValue", dicboxOp[0].id);
+                    $("#ctlCdtValue").diclarge(rec.options);
+                }
+                else {
+                    $("#ccCdtOprator").combobox("loadData", textboxOp);
+                    $("#ccCdtOprator").combobox("setValue", textboxOp[0].id);
+                    $("#ctlCdtValue").textbox(rec.options);
+                }
+            }
+        });
+        //移动面板
+        $("#dialogCdtCombination").window("move", { "left": document.body.clientWidth - 620,"top":2});
+    }
+
+    function btnSearchEvent() {
+        var params = {};
+        params.search = $("#search").textbox("getValue");
+        @if (ViewBag.DateRangeType != null)
+        {
+        <text>
+        params.date_range_type = $("#date_range_type").combobox("getValue");
+        params.start_date = $("#start_date").datebox("getValue");
+        params.end_date = $("#end_date").datebox("getValue");
+        </text>
+        }
+        console.log("查询条件：" + JSON.stringify(params));
+        $('#cmpDG').datagrid("load",params);
+    }
+    $(function () {
+        $('#search').textbox('textbox').keydown(function (e) {
+            if (e.which == 13) {
+                btnSearchEvent();
+                return false;
+            }
+        });
+        //检查服务端是否有设置组合条件
+        $.ajax({
+            type: "GET",
+            url: "JsonConditionGrant",
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                if (data.length < 0)
+                    $('#btnShowCdtComb').remove();
+            },
+            error: function (req, textStatus, err) {
+                console.log('error:获取查询条件子出错！！');
+                $('#btnShowCdtComb').remove();
+            }
+        });
+
+       
+        $('#cmpDG').datagrid('resize', { height: 430 });
+        $("#dialogCdtCombination").window({closed:true});
+    })
+</script>
+

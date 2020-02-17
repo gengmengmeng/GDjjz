@@ -1,0 +1,50 @@
+﻿@{
+    Response.ContentType = "application/json";
+}
+[
+    {
+        "id":"COMPANY_CODE",
+        "text":"单位编号",
+        "ctl_type":"textbox",
+        "options":{}
+    },
+    {
+        "id":"NAME",
+        "text":"单位名称",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"TEL1",
+        "text":"联系电话1",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"TEL2",
+        "text":"联系电话2",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"FAX",
+        "text":"传真号码",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"ADDR_WORKING",
+        "text":"办公地址",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"DISABLED",
+        "text":"状态",
+        "ctl_type":"dicshort",
+        "options":{
+            "url": "JsonDicShort?dic=D_STATE"
+        }
+    },
+    {
+        "id":"CREATE_ON",
+        "text":"录入时间",
+        "ctl_type":"datebox",
+        "options":{}
+    }
+]

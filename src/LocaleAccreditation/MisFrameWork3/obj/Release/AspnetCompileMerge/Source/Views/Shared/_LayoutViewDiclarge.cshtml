@@ -1,0 +1,86 @@
+﻿<div id="cmpDialogDic_DG"></div>
+<div id="toolbarDialogDic_DG">
+    <input id="cmpDialogDic_DG_search" class="easyui-textbox" data-options="prompt:'查询内容'" style="width:620px;">
+    <a href="#" onclick="btnDialogDic_DGSearchEvent()" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:false"></a>
+</div>
+<script>
+    function btnDialogDic_DGSearchEvent() {
+        var params = {};
+        var d = $('#dialogDic').dialog("options");
+        console.log("字典地址:" + d.dic_json_url);
+        params.search = $("#cmpDialogDic_DG_search").textbox("getValue");
+        $('#cmpDialogDic_DG').datagrid("load", params);
+    }
+</script>
+@RenderBody()
+<script>
+    $(function () {
+        $("#cmpDialogDic_DG_search").textbox('textbox').keydown(function (e) {
+            if (e.which == 13) {
+                btnDialogDic_DGSearchEvent();
+            }
+        });
+        cmpDialogDic_DG_init();
+        
+        var d = $('#dialogDic').dialog("options");
+        $('#cmpDialogDic_DG').datagrid({
+            url: d.dic_json_url,
+            onBeforeLoad: function (param) {
+                var d = $('#dialogDic').dialog("options");
+                var dBoxOpt = $(d.dic_cmp_name).textbox("options");
+                console.log("onBeforeLoad dBoxOpt=");
+                console.log(dBoxOpt);
+                if (dBoxOpt.parentDic != undefined) {
+                    var pDic = $("#"+dBoxOpt.parentDic);
+                    console.log("===>> parentDic=" + dBoxOpt.parentDic);
+                    var vFilter = "";
+                    if (pDic.hasClass("easyui-dicshort")) {
+                        vFilter = pDic.combogrid("getValue");
+                    }
+                    else {
+                        vFilter = pDic.textbox("getValue");
+                    }
+                    if (vFilter == "")
+                        vFilter = "XXXX****XXXX";//过滤所有信息
+                    param.filter = vFilter;
+                }
+            },
+            onDblClickRow: function (index, record) {
+               
+                var d = $('#dialogDic').dialog("options");
+                var dBox = $(d.dic_cmp_name).textbox("options");
+                //dBox.load_dm_from_server = false;
+                var oldV = $(d.dic_cmp_name).textbox("getValue");
+                var oldT = $(d.dic_cmp_name).textbox("getText");
+                console.log("选中字典项,输入【" + d.dic_cmp_name + "】框原值:" + oldV + "-" + oldT + " 新值：" + record.DM + "-" + record.MC);
+                if (d.dic_multiple_value == undefined || (!d.dic_multiple_value) || oldV == null || oldV.length == 0) {
+                    dBox.load_dm_from_server = false;
+                    $(d.dic_cmp_name).textbox("setValue", record.DM);
+                    $(d.dic_cmp_name).textbox("setText", record.MC);
+                    dBox.load_dm_from_server = true;
+                }
+                else {
+                    //判断这个值，原来有没有
+                    var allValue = oldV.split(",");
+                    for (i = 0; i < allValue.length; i++) {
+                        if (allValue[i] == record.DM) {
+                            $.messager.alert({
+                                icon: 'warning',
+                                title: '提示',
+                                msg: record.MC + '【' + record.DM +'】 已存在输入框中'
+                            });
+                            return;
+                        }
+                    }
+                    dBox.load_dm_from_server = false;
+                    $(d.dic_cmp_name).textbox("initValue", oldV + "," + record.DM);
+                    $(d.dic_cmp_name).textbox("setText", oldT + "," + record.MC);
+                    dBox.load_dm_from_server = true;
+                }
+                //dBox.load_dm_from_server = true;
+                $('#dialogDic').dialog("close");
+            }
+        })
+    })
+</script>
+

@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutStdConditionCombinationQuery.cshtml";
+    //__TIPS__*: 
+    //下面这行可以定义查询项中是否包含日期查询框，如果查询不需要日期的，可以没注释这句。
+    ViewBag.DateRangeType = new string[] { "制证时间" };
+    //系统默认是不允许删除记录的，如果要显示查询界面的删除按钮，就开启这句
+    ViewBag.ShowDeleteButton = false;
+    ViewBag.ShowChangeStateButton = false;
+    ViewBag.HideCommonButtons = false;
+
+    //以下这些语句设置按钮的状态，也可以Controller里根据权限进行配置
+    ViewBag.DisableBTN_Add = false;
+    ViewBag.DisableBTN_Edit = false;
+    ViewBag.DisableBTN_Delete = true;
+    ViewBag.DisableBTN_Disable = false;
+    ViewBag.DisableBTN_Enable = false;
+}
+<div id="winMainForm"></div>
+<script>
+    $(function () {
+    $('#cmpDG').datagrid({
+        url: 'AcceptStat',
+        singleSelect:true,
+        pagination: true,
+        //rownumbers: true,
+        remoteSort: true,
+        striped: true,
+        onBeforeLoad: function (param) {
+            debugger
+            if (param.search != null || param.cdt_combination != null) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        @* __TIPS__*: 以下同表格中显示的每列的配置信息 *@
+        frozenColumns: [[
+            { field: 'NO_MACHINE', title: '设备编号', align: 'center', width: 200,},
+            { field: 'COUNT', title: '数量', width: 180, align: 'center', },
+            { field: 'FFDWMC', title: '制证单位', width: 300, align: 'center', },
+        ]],
+    });
+    //初始化分页栏按钮,增加导出Excel功能
+    var pager = $("#cmpDG").datagrid().datagrid('getPager')
+    pager.pagination({
+        buttons: [
+            {
+                text: '导出',
+                iconCls: 'icon-table-export',
+                handler: function () {
+                    ef3.datagridToExcel("#cmpDG");
+                }
+            }
+            @*,
+            {
+                text: '打印',
+                iconCls: 'icon-table-export',
+                handler: function () {
+                    debugger;
+                    var data = {};
+                    data.title = "打印设备制证量统计报表";
+                    data.Search = $("#search").textbox("getValue");
+                    data.date_range_type = $("#date_range_type").combobox("getValue");
+                    data.start_date = $("#start_date").datebox("getValue");
+                    data.end_date = $("#end_date").datebox("getValue");
+                    var result = {};
+                    var aa = $("#ttCdtResult").tree("getRoot");
+                    if (aa != null) {
+                        createConditionCombination(result, aa);
+                        var base = new Base64();
+                        var b64 = base.encode(JSON.stringify(result));
+                        data.cdt_combination = b64;
+                    }
+                    console.log(data);
+                    var url='@Url.Action("ActionPrint", "SBZZJL")';
+                    $.print(url, data);
+                }
+            }*@
+        ]
+        });
+    });
+</script>
+

@@ -1,0 +1,63 @@
+﻿@{
+    Response.ContentType = "application/json";
+}
+[
+    {
+        "id":"SLBH",
+        "text":"受理编号",
+        "ctl_type":"textbox",
+        "options":{}
+    },
+    {
+        "id":"SFZHM",
+        "text":"身份号码",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"NO_MACHINE",
+        "text":"制证机器编号",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"FFDWDM",
+        "text":"发放单位代码",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"FFDWMC",
+        "text":"发放单位名称",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"ZZXXZZSFCG",
+        "text":"状态",
+        "ctl_type":"dicshort",
+        "options":{
+            "url": "JsonDicShort?dic=D_ZKSTATE"
+        }
+    },
+    {
+        "id":"CJSJ",
+        "text":"制证时间",
+        "ctl_type":"datebox",
+        "options":{}
+    },
+@*{
+         "id":"RESERVATION12",
+         "text":"分散制证代码",
+         "ctl_type":"textbox"
+     },
+    {
+         "id":"ZZXXSFDQ",
+         "text":"制证是否读取",
+         "ctl_type":"textbox"
+     },*@
+{
+        "id":"COMPANY_ID_1",
+        "text":"单位名称含下级",
+        "ctl_type":"diclarge",
+        "options":{
+         "dic_json_url": "JsonDicLarge?comma_is_or=true&dic=V_D_FW_COMP",
+            "dic_view_url": "ViewDicLargeUI?dic=V_D_FW_COMP"}
+    }
+]

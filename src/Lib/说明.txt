@@ -1,0 +1,2 @@
+System.Data.SQLite.dll
+区分64位和32位，其中64位要手动复制SQLite.Interop.dll到应用根目录。

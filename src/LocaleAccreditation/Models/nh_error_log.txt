@@ -1,0 +1,104 @@
+
+
+==========开始==============
+2019-05-27 15:16:12,900 [55] ERROR MisFrameWork.core.db.Support.AbstractDataBaseUtility [(null)]  (null)   - 出错：insert into FW_S_COMAPANIES (NAME,COMPANY_CODE,FAX,TEL1,TEL2,ADDR_WORKING,DELETED_MARK,VER,ID,CREATE_ON,CREATE_BY) values(:p0,:p1,:p2,:p3,:p4,:p5,:p6,:p7,:p8,:p9,:p10)
+p0[String]:积极公司
+p1[String]:12323213
+p2[String]:
+p3[String]:
+p4[String]:
+p5[String]:
+p6[Decimal]:0
+p7[Decimal]:1
+p8[Decimal]:1700
+p9[DateTime]:2019/5/27 15:16:12
+p10[String]:admin
+
+ 
+
+======================
+System.Data.OracleClient.OracleException (0x80131938): ORA-00001: 违反唯一约束条件 (SCOTT.PK_FW_S_COMAPANIES)
+
+   在 System.Data.OracleClient.OracleConnection.CheckError(OciErrorHandle errorHandle, Int32 rc)
+   在 System.Data.OracleClient.OracleCommand.Execute(OciStatementHandle statementHandle, CommandBehavior behavior, Boolean needRowid, OciRowidDescriptor& rowidDescriptor, ArrayList& resultParameterOrdinals)
+   在 System.Data.OracleClient.OracleCommand.ExecuteNonQueryInternal(Boolean needRowid, OciRowidDescriptor& rowidDescriptor)
+   在 System.Data.OracleClient.OracleCommand.ExecuteNonQuery()
+   在 MisFrameWork.core.db.Support.AbstractDataBaseUtility.InsertRecord(Session session, String tableName, IDictionary record)
+
+
+==========开始==============
+2019-05-27 15:17:28,518 [64] ERROR MisFrameWork.core.db.Support.AbstractDataBaseUtility [(null)]  (null)   - 出错：insert into FW_S_COMAPANIES (NAME,COMPANY_CODE,FAX,TEL1,TEL2,ADDR_WORKING,DELETED_MARK,VER,ID,CREATE_ON,CREATE_BY) values(:p0,:p1,:p2,:p3,:p4,:p5,:p6,:p7,:p8,:p9,:p10)
+p0[String]:积极公司
+p1[String]:12323213
+p2[String]:
+p3[String]:
+p4[String]:
+p5[String]:
+p6[Decimal]:0
+p7[Decimal]:1
+p8[Decimal]:1701
+p9[DateTime]:2019/5/27 15:17:28
+p10[String]:admin
+
+ 
+
+======================
+System.Data.OracleClient.OracleException (0x80131938): ORA-00001: 违反唯一约束条件 (SCOTT.PK_FW_S_COMAPANIES)
+
+   在 System.Data.OracleClient.OracleConnection.CheckError(OciErrorHandle errorHandle, Int32 rc)
+   在 System.Data.OracleClient.OracleCommand.Execute(OciStatementHandle statementHandle, CommandBehavior behavior, Boolean needRowid, OciRowidDescriptor& rowidDescriptor, ArrayList& resultParameterOrdinals)
+   在 System.Data.OracleClient.OracleCommand.ExecuteNonQueryInternal(Boolean needRowid, OciRowidDescriptor& rowidDescriptor)
+   在 System.Data.OracleClient.OracleCommand.ExecuteNonQuery()
+   在 MisFrameWork.core.db.Support.AbstractDataBaseUtility.InsertRecord(Session session, String tableName, IDictionary record)
+
+
+==========开始==============
+2019-05-27 15:17:30,272 [64] ERROR MisFrameWork.core.db.Support.AbstractDataBaseUtility [(null)]  (null)   - 出错：insert into FW_S_COMAPANIES (NAME,COMPANY_CODE,FAX,TEL1,TEL2,ADDR_WORKING,DELETED_MARK,VER,ID,CREATE_ON,CREATE_BY) values(:p0,:p1,:p2,:p3,:p4,:p5,:p6,:p7,:p8,:p9,:p10)
+p0[String]:积极公司
+p1[String]:12323213
+p2[String]:
+p3[String]:
+p4[String]:
+p5[String]:
+p6[Decimal]:0
+p7[Decimal]:1
+p8[Decimal]:1702
+p9[DateTime]:2019/5/27 15:17:30
+p10[String]:admin
+
+ 
+
+======================
+System.Data.OracleClient.OracleException (0x80131938): ORA-00001: 违反唯一约束条件 (SCOTT.PK_FW_S_COMAPANIES)
+
+   在 System.Data.OracleClient.OracleConnection.CheckError(OciErrorHandle errorHandle, Int32 rc)
+   在 System.Data.OracleClient.OracleCommand.Execute(OciStatementHandle statementHandle, CommandBehavior behavior, Boolean needRowid, OciRowidDescriptor& rowidDescriptor, ArrayList& resultParameterOrdinals)
+   在 System.Data.OracleClient.OracleCommand.ExecuteNonQueryInternal(Boolean needRowid, OciRowidDescriptor& rowidDescriptor)
+   在 System.Data.OracleClient.OracleCommand.ExecuteNonQuery()
+   在 MisFrameWork.core.db.Support.AbstractDataBaseUtility.InsertRecord(Session session, String tableName, IDictionary record)
+
+
+==========开始==============
+2019-05-27 15:17:32,089 [64] ERROR MisFrameWork.core.db.Support.AbstractDataBaseUtility [(null)]  (null)   - 出错：insert into FW_S_COMAPANIES (NAME,COMPANY_CODE,FAX,TEL1,TEL2,ADDR_WORKING,DELETED_MARK,VER,ID,CREATE_ON,CREATE_BY) values(:p0,:p1,:p2,:p3,:p4,:p5,:p6,:p7,:p8,:p9,:p10)
+p0[String]:积极公司
+p1[String]:12323213
+p2[String]:
+p3[String]:
+p4[String]:
+p5[String]:
+p6[Decimal]:0
+p7[Decimal]:1
+p8[Decimal]:1703
+p9[DateTime]:2019/5/27 15:17:32
+p10[String]:admin
+
+ 
+
+======================
+System.Data.OracleClient.OracleException (0x80131938): ORA-00001: 违反唯一约束条件 (SCOTT.PK_FW_S_COMAPANIES)
+
+   在 System.Data.OracleClient.OracleConnection.CheckError(OciErrorHandle errorHandle, Int32 rc)
+   在 System.Data.OracleClient.OracleCommand.Execute(OciStatementHandle statementHandle, CommandBehavior behavior, Boolean needRowid, OciRowidDescriptor& rowidDescriptor, ArrayList& resultParameterOrdinals)
+   在 System.Data.OracleClient.OracleCommand.ExecuteNonQueryInternal(Boolean needRowid, OciRowidDescriptor& rowidDescriptor)
+   在 System.Data.OracleClient.OracleCommand.ExecuteNonQuery()
+   在 MisFrameWork.core.db.Support.AbstractDataBaseUtility.InsertRecord(Session session, String tableName, IDictionary record)

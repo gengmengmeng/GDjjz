@@ -1,0 +1,46 @@
+﻿@{
+    Response.ContentType = "application/json";
+}
+[
+    {
+        "id":"ROLE_NAME",
+        "text":"角色名称",
+        "ctl_type":"textbox",
+        "options":{}
+    },
+    {
+        "id":"SORT_CODE",
+        "text":"排序编号",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"DISABLED",
+        "text":"状态",
+        "ctl_type":"dicshort",
+        "options":{
+            "url": "JsonDicShort?dic=D_STATE"
+        }
+    },
+    {
+        "id":"CREATE_BY",
+        "text":"创建用户",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"UPDATE_BY",
+        "text":"最后编辑用户",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"CREATE_ON",
+        "text":"创建时间",
+        "ctl_type":"datebox",
+        "options":{}
+    },
+    {
+        "id":"UPDATE_ON",
+        "text":"更新时间",
+        "ctl_type":"datebox",
+        "options":{}
+    }
+]

@@ -1,0 +1,51 @@
+﻿@{
+    /**/
+
+    Response.ContentType = "application/json";
+}
+[
+    {
+        "id":"MACHINENO",
+        "text":"机器编号",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"SSDW",
+        "text":"所属单位代码",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"SSDW_V_D_FW_COMP__MC",
+        "text":"所属单位名称",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"SBFZR_V_D_FW_S_USERS__MC",
+        "text":"负责人名称",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"PHONE",
+        "text":"负责人联系电话",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"ADDRESS",
+        "text":"负责人联系地址",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"DISABLED",
+        "text":"状态",
+        "ctl_type":"dicshort",
+        "options":{
+            "url": "JsonDicShort?dic=D_STATE"
+        }
+    },
+    {
+        "id":"CREATE_ON",
+        "text":"录入时间",
+        "ctl_type":"datebox",
+        "options":{}
+    }
+]

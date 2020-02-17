@@ -1,0 +1,119 @@
+﻿
+@{
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render(new string[]
+    {
+        "~/Content/font-awesome.css",
+        "~/Scripts/jeasyui/themes/"+Request.Cookies["theme"].Value+"/easyui.css",
+        "~/Scripts/jeasyui/themes/icon.css",
+        "~/Scripts/jeasyui/themes/color.css",
+        "~/Scripts/kindeditor/themes/default/default.css",
+        "~/Scripts/kindeditor/plugins/code/prettify.css",
+        "~/Content/Site.css"
+    })
+
+    @Scripts.Render(new string[]
+    {
+        "~/Scripts/jquery-3.3.1.min.js",
+        "~/Scripts/jquery.validate.min.js",
+        "~/Scripts/moment.min.js",
+        "~/Scripts/moment-with-locales.min.js",
+        "~/Scripts/jeasyui/jquery.easyui.min.js",
+        "~/Scripts/jeasyui/datagrid-detailview.js",
+        "~/Scripts/jeasyui/locale/easyui-lang-zh_CN.js",
+        "~/Scripts/kindeditor/kindeditor-all.js",
+        "~/Scripts/kindeditor/lang/zh-CN.js",
+        "~/Scripts/misframework3.js",
+        "~/Scripts/fw_plugins/export_datagrid.js"
+    })
+
+</head>
+<body class="easyui-layout">
+    <div data-options="region:'north',title:'',border:false,split:false" style="height:38px;margin-top:8px;">
+        <div id="cmpDgToolBar">
+            <div id="cmpDgToolBar_Left" style="float:left">
+                @if (ViewBag.HideCommonButtons == null || !ViewBag.HideCommonButtons)
+                {
+                    <a id="stdBtnAdd" href="#" onclick="btnAddEvent()" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:false,disabled:@(ViewBag.DisableBTN_Add!=null && ViewBag.DisableBTN_Add?"true":"false")">增加</a>
+                    <a id="stdBtnEdit" href="#" onclick="btnEditEvent()" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:false,disabled:@(ViewBag.DisableBTN_Edit!=null && ViewBag.DisableBTN_Edit?"true":"false")">修改</a>
+                    if (ViewBag.ShowDeleteButton != null && ViewBag.ShowDeleteButton)
+                    {
+                    <a id="stdBtnDelete" href="#" onclick="btnRemoveEvent()" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:false,disabled:@(ViewBag.DisableBTN_Delete != null && ViewBag.DisableBTN_Delete ? "true" : "false")">删除</a>
+                    }
+                
+                    if (ViewBag.ShowChangeStateButton != null && ViewBag.ShowChangeStateButton)
+                    {
+                    <span class="datagrid-btn-separator" style="vertical-align: middle;display:inline-block;float:none"></span>
+                    <a href="#" onclick="btnDisableEvent()" class="easyui-linkbutton" data-options="iconCls:'icon-no',plain:false,disabled:@(ViewBag.DisableBTN_Disable != null && ViewBag.DisableBTN_Disable ? "true" : "false")">停用</a>
+                    <a href="#" onclick="btnEnableEvent()" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:false,disabled:@(ViewBag.DisableBTN_Enable != null && ViewBag.DisableBTN_Enable ? "true" : "false")">启用</a>
+                    }
+                }
+            </div>
+            <div id="cmpDgToolBar_Right" style="float:right">
+                @if (ViewBag.DateRangeType != null)
+                {
+                    <select id="date_range_type" class="easyui-combobox" name="date_rang_type" style="width:120px;">
+                        <option value="0">不过滤</option>
+                        @for (var i = 1; i <= ViewBag.DateRangeType.Length; i++)
+                        {
+                            <option value="@i">@ViewBag.DateRangeType[i - 1]</option>
+                        }
+                    </select>
+                }
+                @if (ViewBag.DateRangeType != null)
+                {
+                    <text>
+                        <input id="start_date" type="text" class="easyui-datebox" style="width:120px" data-options="prompt:'起始时间'">
+                        至
+                        <input id="end_date" type="text" class="easyui-datebox" style="width:120px" data-options="prompt:'结束时间'">
+
+                    </text>
+                }
+                <input id="search" class="easyui-textbox" data-options="prompt:'查询内容'" style="width:150px">
+                <a href="#" onclick="btnSearchEvent()" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:false"></a>                
+            </div>
+        </div>
+    </div>
+    <div data-options="region:'center',title:'',border:false">
+        <table id="cmpDG"></table>
+    </div>
+    <div id="dialogDic"></div>
+    @* 组合查询*@
+    @RenderBody()
+</body>
+</html>
+<script>
+    function btnSearchEvent() {
+        var params = {};
+        params.search = $("#search").textbox("getValue");
+        @if (ViewBag.DateRangeType != null)
+        {
+        <text>
+        params.date_range_type = $("#date_range_type").combobox("getValue");
+        params.start_date = $("#start_date").datebox("getValue");
+        params.end_date = $("#end_date").datebox("getValue");
+        </text>
+        }
+        console.log("查询条件：" + JSON.stringify(params));
+        $('#cmpDG').datagrid("load",params);
+    }
+    $(function () {
+        $('#search').textbox('textbox').keydown(function (e) {
+            if (e.which == 13) {
+                btnSearchEvent();
+                return false;
+            }
+        });
+
+        $('#cmpDG').datagrid('resize', { height: 430 });
+    })
+</script>
+

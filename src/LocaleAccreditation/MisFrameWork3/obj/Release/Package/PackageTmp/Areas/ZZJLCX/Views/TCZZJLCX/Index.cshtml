@@ -1,0 +1,217 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutStdConditionCombinationQuery.cshtml";
+    //__TIPS__*: 
+    //下面这行可以定义查询项中是否包含日期查询框，如果查询不需要日期的，可以没注释这句。
+    ViewBag.DateRangeType = new string[] { "制证时间" };
+    //系统默认是不允许删除记录的，如果要显示查询界面的删除按钮，就开启这句
+    ViewBag.ShowDeleteButton = false;
+    ViewBag.ShowChangeStateButton = true;
+    ViewBag.HideCommonButtons = false;
+
+    //以下这些语句设置按钮的状态，也可以Controller里根据权限进行配置
+    ViewBag.DisableBTN_Add = true;
+    ViewBag.DisableBTN_Edit = false;
+    ViewBag.DisableBTN_Delete = true;
+    ViewBag.DisableBTN_Disable = true;
+    ViewBag.DisableBTN_Enable = true;
+}
+<div id="winMainForm"></div>
+<script>
+    function btnEnableEvent() {
+        var selectRow = $('#cmpDG').datagrid("getSelected");
+        if (selectRow == null || selectRow == undefined) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '请选择一条要更改状态的记录'
+            });
+            return;
+        }       
+        $.ajax({
+            url: "ActionChangeState",
+            data: {
+                @* __TIPS__: 根据实际数据结构传入主键 *@
+            "SLBH": selectRow.SLBH,
+           "ZZXXZZSFCG": selectRow.ZZXXZZSFCG
+    },
+    success: function(data) {
+        console.log(data);
+        if (data.success) {
+            $('#cmpDG').datagrid("reload");
+        }
+        else {
+            $.messager.alert({
+                icon: 'error',
+                title: '提示',
+                msg: data.message
+            });
+        }
+    },
+    error: function (data) {
+        alert(data);
+    }
+        });
+    }
+
+
+    function btnEditEvent() {
+        var selectRow = $('#cmpDG').datagrid("getSelected");
+        if (selectRow == null || selectRow == undefined) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '请选择一条要 【编辑】 的记录'
+            });
+            return;
+        }
+        var ZZXXZZSFCG = selectRow.ZZXXZZSFCG;
+        if (ZZXXZZSFCG == "0") {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '制证失败，不能更改制证状态'
+            });
+            return;
+        }
+        $('#winMainForm').dialog({
+
+            title: '查看身份证号为 【' + selectRow.GMSFHM +'】制证信息',
+            width: 720,//窗体边框12,加上内部div的边距20
+            height: 400,
+            top: 5,
+            closed: false,
+            cache: false,
+            @* __TIPS__: 这里是点击【修改】按钮时，窗体内容的加载的地址，要与控制器同名，取框架默认值的话就不需要修改，如果用绝地址就用@Url.Action("函数", "控制器") 的方式 *@
+            href: "ViewFormEdit",
+            modal: true,
+                onLoad: function () {
+                    //加载录入项
+                    $("#OBJECT_ID").val(selectRow.SLBH);
+                },
+        buttons: [
+            
+        ]
+    });
+    }
+
+
+    $(function () {
+    $('#cmpDG').datagrid({
+        url: 'JsonDataList',
+        singleSelect:true,
+        pagination: true,
+        rownumbers: true,
+        remoteSort: true,
+        striped: true,
+        sortName: 'ZZXXZZRQ',
+        sortOrder: 'desc',
+        onBeforeLoad: function (param) {
+            debugger
+            if (param.search != null || param.cdt_combination != null ) {
+                return true;
+            }else
+            {
+                return false;
+            }           
+        },
+        onDblClickRow: function (index, field, value) {
+            $("#stdBtnEdit").click();
+        },
+        //toolbar: "#cmpDgToolBar",
+        @* __TIPS__*: 以下同表格中显示的每列的配置信息 *@
+        frozenColumns: [[
+            { field: 'SLBH', title: '受理编号', align: 'center', width: 185},
+            { field: 'XM', title: '姓名', align: 'center', width: 100},
+            { field: 'GMSFHM', title: '身份号码', align: 'center', width: 170},
+        ]],
+        columns: [[
+            { field: 'ZZZXPH', title: '制证芯片号', align: 'center', width: 280},
+            { field: 'ZZSBID', title: '制证设备编号', align: 'center', width: 130},
+            { field: 'ZZXXZZDW', title: '制证单位代码', align: 'center', width: 140},
+            { field: 'ZZXXZZDWMC', title: '制证单位名称', align: 'center', width: 180},
+            { field: 'ZZXXZZRQ', title: '制证时间', width: 160, align: 'center'},
+            {
+                field: 'ZZXXZZSFCG', title: '状态', width: 60, align: 'center',
+                formatter: function (d) {
+                    if (d == 1)
+                        return '<span class="label label-success">成功</span>';
+                    if (d == 0)
+                        return '<span class="label label-danger" >失败</span>';
+                    if (d == null)
+                        return '<span class="label label-danger" >未制证</span>';
+                }
+            },
+            {
+                field: 'PHOTO', title: '图像查看', width: 150, align: 'center',
+                formatter: function (d) {
+                    debugger
+                    var BLR = d;
+                    return '<a onclick="checkPhoto(\'' + BLR + '\')" class="easyui-linkbutton" style="cursor:pointer;font-weight:bolder;font-size:16px;">图像查看</a>';
+                }
+            }
+        ]]
+    });
+
+    //初始化分页栏按钮,增加导出Excel功能
+    var pager = $("#cmpDG").datagrid().datagrid('getPager')
+    pager.pagination({
+        buttons: [
+            {
+                text: '导出',
+                iconCls: 'icon-table-export',
+                handler: function () {
+                    ef3.datagridToExcel("#cmpDG");
+                }
+            },
+            {
+                text: '打印',
+                iconCls: 'icon-table-export',
+                handler: function () {
+                    var data = {};
+                    data.title = "打印制证记录报表";
+                    data.Search = $("#search").textbox("getValue");
+                    data.date_range_type = $("#date_range_type").combobox("getValue");
+                    data.start_date = $("#start_date").datebox("getValue");
+                    data.end_date = $("#end_date").datebox("getValue");
+                    var result = {};
+                    var aa = $("#ttCdtResult").tree("getRoot");
+                    if (aa != null) {
+                        createConditionCombination(result, aa);
+                        var base = new Base64();
+                        var b64 = base.encode(JSON.stringify(result));
+                        data.cdt_combination = b64;
+                    }
+                    console.log(data);
+                    var url='@Url.Action("ActionPrint", "TCZZJLCX")';
+                    $.print(url, data);
+                }
+            }
+        ]
+        });
+    });
+
+    function checkPhoto(slbh) {
+        $('#winMainForm').dialog({
+            title: '图像查看',
+            width: 400,//窗体边框12,加上内部div的边距20
+            height: 400,
+            top: 5,
+            closed: false,
+            cache: false,
+            @* __TIPS__: 这里是点击【修改】按钮时，窗体内容的加载的地址，要与控制器同名，取框架默认值的话就不需要修改，如果用绝地址就用@Url.Action("函数", "控制器") 的方式 *@
+            href: "ViewFormTCPhoto",
+            modal: true,
+                onLoad: function () {
+                    //加载录入项
+                    debugger
+                    $("#SLBH").val(slbh);
+                },
+        buttons: [
+
+        ]
+    });
+    }
+</script>
+

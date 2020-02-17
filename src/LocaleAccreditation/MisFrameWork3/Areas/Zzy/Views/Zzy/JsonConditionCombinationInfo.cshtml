@@ -1,0 +1,35 @@
+﻿@{
+    Response.ContentType = "application/json";
+}
+[
+    {
+        "id":"USER_NAME",
+        "text":"制证员名称",
+        "ctl_type":"textbox",
+        "options":{}
+    },
+    {
+        "id":"COMPANY_ID",
+        "text":"所属单位代码",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"COMPANY_ID_V_D_FW_COMP__MC",
+        "text":"所属单位名称",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"DISABLED",
+        "text":"状态",
+        "ctl_type":"dicshort",
+        "options":{
+            "url": "JsonDicShort?dic=D_STATE"
+        }
+    },
+    {
+        "id":"CREATE_ON",
+        "text":"录入时间",
+        "ctl_type":"datebox",
+        "options":{}
+    }
+]

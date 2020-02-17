@@ -1,0 +1,146 @@
+﻿
+@{
+    ViewBag.Title = "ViewFormAdd";
+}
+<div style="padding:10px">
+    <form id="formData" method="post" action="ActionEdit">
+        @* __TIPS__ 输入元素尽量统一为两列以内，宽度要与Index 打开的窗体宽度对应*@
+        <input type="hidden" id="OBJECT_ID" name="OBJECT_ID" value="" /> @* 不要使用实际的主键 *@
+        <div style="max-height:500px">
+            @* __TIPS__ 以下这些界面元素，可以从Add窗体中复制过来*@
+
+            <div style="margin-bottom:5px;">
+                <input id="COMPANY_ID" name="COMPANY_ID" class="easyui-diclarge" data-options="width:'96.5%',labelWidth:110,label:'所属单位：',labelAlign:'right',required:true,
+                       title: '单位列表',
+                       dic_json_url:'JsonCompanies?comma_is_or=true',
+                       dic_view_url:'ViewFormQueryCompany',
+                       dic_multiple_value:false
+                       ">
+            </div>
+            <div style="margin-bottom:5px;">
+                <input id="USER_ID" name="USER_ID" class="easyui-textbox" data-options="iconCls:'icon-man',width:'48%',label:'登陆账号：',labelWidth:110,labelAlign:'right',disabled:'true',
+                       required:true,">
+                <input id="USER_NAME" name="USER_NAME" class="easyui-textbox" data-options="width:'48%',label:'用户名称：',labelWidth:110,labelAlign:'right',required:true,multiline:false,
+                       required:true,">
+            </div>
+            <div style="margin-bottom:5px;">
+                <input id="USER_PASSWD" name="USER_PASSWD" class="easyui-passwordbox" data-options="width:'48%',label:'登陆密码：',labelWidth:110,labelAlign:'right',required:false,
+                       ">
+                <input id="REP_USER_PASSWD" name="REP_USER_PASSWD" class="easyui-passwordbox" data-options="width:'48%',label:'校验密码：',labelWidth:110,labelAlign:'right',required:false,
+                       " validType="repasswd['#USER_PASSWD']">
+            </div>
+            <div style="margin-bottom:5px;">
+                <input id="SB_PASSWD" name="SB_PASSWD" class="easyui-textbox" data-options="prompt:'请输入数字',width:'48%',label:'设备密码：',labelWidth:110,labelAlign:'right',required:false,multiline:false">
+                <input id="SB_ID" name="SB_ID" class="easyui-diclarge" data-options="width:'48%',labelWidth:110,label:'所属设备：',labelAlign:'right',required:false,
+                       title: '设备列表',
+                       dic_json_url:'JsonMachine?comma_is_or=true',
+                       dic_view_url:'ViewFormQueryMachine',
+                       dic_multiple_value:true
+                       ">
+            </div>
+            <div style="margin-bottom:5px;">
+                <input id="TEL1" name="TEL1" class="easyui-textbox" data-options="width:'48%',label:'联系电话1：',labelWidth:110,labelAlign:'right',required:false,multiline:false">
+                <input id="TEL2" name="TEL2" class="easyui-textbox" data-options="width:'48%',label:'联系电话2：',labelWidth:110,labelAlign:'right',required:false,multiline:false">
+            </div>
+            <div style="margin-bottom:5px;">
+                <input id="EMAIL" name="EMAIL" class="easyui-textbox" data-options="width:'96.5%',validType:['email'],label:'电子邮箱：',labelWidth:110,labelAlign:'right',required:false,multiline:false">
+            </div>
+            <div style="margin-bottom:5px;">
+                <input id="ADDR" name="ADDR" class="easyui-textbox" data-options="width:'96.5%',label:'联系地址：',labelWidth:110,labelAlign:'right',required:false,multiline:false">
+            </div>
+
+            <table id="cmpDG_Roles"></table>
+        </div>
+    </form>
+</div>
+<script>   
+    function btnForm_OK_Click_Event(e) {
+        console.log($('#formData').serialize());
+        $('#formData').form('submit', {
+            onSubmit: function (d) {
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    return false;
+                }
+                @* __TIPS__: 这里可以把Form以外的一些值添加到服务器 *@
+                return true;
+            },
+            success: function (data) {
+                var data = eval('(' + data + ')');  // change the JSON string to javascript object
+                if (!data.success) {
+                    $.messager.alert({
+                        icon: 'error',
+                        title: '提示',
+                        msg: data.message
+                        });
+                }
+                else {
+                    $.messager.alert({
+                        icon: 'info',
+                        title: '提示',
+                        msg: '修改成功！',
+                        fn: function () {
+                            var opt = $('#winMainForm').dialog("options");
+                            opt.dg.datagrid("reload");
+                            $('#winMainForm').dialog("close");
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    @* 绑定窗体外按钮的事件，按钮名称要与Index里的对应 *@
+    $(function () {
+        $("#btnForm_OK").bind('click', btnForm_OK_Click_Event);
+       
+        //加载录入内容
+        @*
+            __TIPS__:这里修改加载数据的地址,可以使用绝对地址的方式【@Url.Action("JsonDataList", "Roles")】
+        *@
+        $.getJSON("JsonDataList?id=" + $("#OBJECT_ID").val(), function (data) {
+            console.log(data);
+            if (data.rows == undefined) {
+                $.messager.alert({
+                    icon: 'error',
+                    title: '错误',
+                    msg: "没有查到相应记录【" + $("#OBJECT_ID").val() + "】"
+                });
+                return;
+            }
+            $('#formData').form("load", data.rows[0]);
+            @* __TIPS__:如果在编缉窗口中有用到弹窗式字典控件，要调用以下这句来加载数据 *@
+            mf3.cmpDictionaryConvertDm2Mc();
+
+        });
+
+
+        @* 加载角色列表 *@
+        $('#cmpDG_Roles').datagrid({
+            url: "JsonRoles?user_id=" + $("#OBJECT_ID").val(),
+            singleSelect: true,
+            selectOnCheck: true,
+            checkOnSelect: true,
+            pagination: false,
+            rownumbers: true,
+            height: "300px",
+            idField:"ID",
+            //toolbar: "#cmpDgToolBar",
+            columns: [[
+                {
+                    field: 'ID',
+                    formatter: function (value, rec, rowIndex) {
+                        if (rec.CHECKED)
+                            return "<input type=\"checkbox\" name=\"ROLES_ID\" value=\"" + rec.ID + "\" checked>";
+                        return "<input type=\"checkbox\" name=\"ROLES_ID\" value=\"" + rec.ID + "\" >";
+                    }
+                },
+                { field: 'ROLE_NAME', title: '角色名称', width: 160 },
+                { field: 'ROLE_DESCRIPT', title: '角色描述', width: 280 },
+                { field: 'CREATE_BY', title: '创建用户', width: 100},
+            ]]
+        });
+    })
+</script>
+
+

@@ -1,0 +1,95 @@
+﻿@{
+    ViewBag.Title = "广东居住证现场制证管理系统 MisFramework3";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>广东居住证现场制证管理系统</title>
+    <link href="/Content/font-awesome.css" rel="stylesheet">
+    <link href="/Scripts/jeasyui/themes/default/easyui.css" rel="stylesheet">
+    <link href="/Scripts/jeasyui/themes/icon.css" rel="stylesheet">
+    <link href="/Scripts/jeasyui/themes/color.css" rel="stylesheet">
+    <link href="/Content/Site.css" rel="stylesheet">
+
+    <script src="/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="/Scripts/jquery.validate.min.js"></script>
+    <script src="/Scripts/moment.min.js"></script>
+    <script src="/Scripts/moment-with-locales.min.js"></script>
+    <script src="/Scripts/jeasyui/jquery.easyui.min.js"></script>
+    <script src="/Scripts/jeasyui/locale/easyui-lang-zh_CN.js"></script>
+    <script src="/Scripts/fw_plugins/md5.js"></script>
+</head>
+<body style="background-color:#EBEBEB;">
+    <div style="width:360px;height:160px;margin:auto;margin-left: auto; margin-right: auto;
+         width: 976px;height: 567px;text-align: center;background-image:url(/Content/images/Login.jpg);">
+        <div style="padding:10px;position: absolute;margin-left: 661px;margin-top: 236px;width: 195px;height: 17px;z-index: 10; padding: 4px 0px;border-style: none;">
+            <form id="fLogin">
+                <div style="margin-bottom:14px;">
+                    <input id="USER_ID" name="USER_ID" class="easyui-textbox" data-options="iconCls:'icon-man',label:'',labelWidth:100,labelAlign:'right',
+                       required:true
+                       " style="width:203px;height:32px">
+                </div>
+                <div style="margin-bottom:10px;">
+                    <input id="USER_PASSWD" name="USER_PASSWD" class="easyui-passwordbox" data-options="label:'',labelWidth:100,labelAlign:'right',required:false,
+                       required:true" style="width:203px;height:32px">
+                </div>
+            </form>
+        </div>
+        <div id="bb" style="text-align:center;width: 92px; height: 29px; position: absolute;margin-left: 708px;margin-top: 330px;cursor: pointer;">
+            <a style="width: 92px; height: 29px;background-image:url(/Content/images/btn_login.jpg);" href="#" onclick="btnLoginEvent()" class="easyui-linkbutton"></a>
+        </div>
+        <div id="msg">
+        </div>
+
+    </div>
+    @*<table align="center">
+        <tr>
+            <td>
+                浏览器下载：
+                <a style="fontsize:8px;" href="ChromeStandalone_55.exe">谷歌浏览器55</>
+            </td>
+            <td>  </td>
+            <td><a style="fontsize:8px;" href="Chrome_installer-72.exe">谷歌浏览器72</></td>
+        </tr>
+    </table>*@
+</body>
+</html>
+<script>
+    function btnLoginEvent() {
+        var isValid = $("#fLogin").form('validate');
+        if (!isValid) {
+            return false;
+        }
+        var uid = $("#USER_ID").textbox("getValue");
+        var pwd_md5 = $("#USER_PASSWD").textbox("getValue");
+        pwd_md5 = hex_md5(pwd_md5);
+        $.getJSON("@Url.Action("ActionLogin", "Home")?uid=" + uid + "&pwd_md5=" + pwd_md5, function (data) {
+            console.log(data);
+            if (data.success)
+                window.location.href = "@Url.Action("ViewMainForm", "Home")";
+            else
+                alert(data.message);
+        });
+    }
+
+    $(function () {
+        if (("" != "@Request["message"]")&&("@Request["message"]"!=null)) {
+            alert("@Request["message"]");
+        }
+        $("#USER_ID").textbox('textbox').focus();
+        $("#USER_ID").textbox('textbox').keydown(function (e) {
+            if (e.which == 13) {
+                $("#USER_PASSWD").textbox('textbox').focus();
+            }
+        });
+
+        $("#USER_PASSWD").textbox('textbox').keydown(function (e) {
+            if (e.which == 13) {
+                btnLoginEvent();
+            }
+        });
+    })
+</script>

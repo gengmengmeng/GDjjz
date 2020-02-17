@@ -1,0 +1,56 @@
+﻿@{
+    Response.ContentType = "application/json";
+}
+[
+
+    {
+        "id":"EXTEND_NAME",
+        "text":"发卡人",
+        "ctl_type":"textbox",
+        "options":{}
+    },
+{
+        "id":"EXTEND_ID",
+        "text":"发卡人单位",
+        "ctl_type":"diclarge",
+        "options":{
+            "dic_json_url": "JsonDicLarge?comma_is_or=true&dic=V_D_FW_COMP",
+            "dic_view_url": "ViewDicLargeUI?dic=V_D_FW_COMP"
+        }
+    },
+{
+        "id":"RECEIVE_NAME",
+        "text":"领卡人",
+        "ctl_type":"textbox",
+        "options":{}
+    },
+{
+        "id":"RECEIVE_ID",
+        "text":"领卡人单位",
+        "ctl_type":"diclarge",
+        "options":{
+            "dic_json_url": "JsonDicLarge?comma_is_or=true&dic=V_D_FW_COMP",
+            "dic_view_url": "ViewDicLargeUI?dic=V_D_FW_COMP"
+        }
+    },
+   {
+        "id":"RECEIVE_NUMBER",
+        "text":"领卡数量",
+        "ctl_type":"textbox",
+        "options":{}
+    },
+   {
+        "id":"RECEIVE_PHONE",
+        "text":"领卡人联系方式",
+        "ctl_type":"textbox",
+        "options":{}
+    },
+   {
+        "id":"COMPANY_ID_1",
+        "text":"查询单位名称含下级",
+        "ctl_type":"diclarge",
+        "options":{
+         "dic_json_url": "JsonDicLarge?comma_is_or=true&dic=V_D_FW_COMP",
+            "dic_view_url": "ViewDicLargeUI?dic=V_D_FW_COMP"}
+    }
+]

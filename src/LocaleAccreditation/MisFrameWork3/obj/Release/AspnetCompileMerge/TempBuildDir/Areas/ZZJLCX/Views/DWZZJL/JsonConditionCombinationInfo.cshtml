@@ -1,0 +1,38 @@
+﻿@{
+    Response.ContentType = "application/json";
+}
+[
+    {
+        "id":"ZZXXZZDW",
+        "text":"制证单位代码",
+        "ctl_type":"textbox",
+        "options":{}
+    },
+    {
+        "id":"ZZXXZZDWMC",
+        "text":"制证单位名称",
+        "ctl_type":"textbox"
+    },
+@*{
+        "id":"DISABLED",
+        "text":"状态",
+        "ctl_type":"dicshort",
+        "options":{
+            "url": "JsonDicShort?dic=D_STATE"
+        }
+    },*@
+    {
+        "id":"ZZXXZZRQ",
+        "text":"制证时间",
+        "ctl_type":"datebox",
+        "options":{}
+    },
+   {
+        "id":"COMPANY_ID_1",
+        "text":"单位名称含下级",
+        "ctl_type":"diclarge",
+        "options":{
+         "dic_json_url": "JsonDicLarge?comma_is_or=true&dic=V_D_FW_COMP",
+            "dic_view_url": "ViewDicLargeUI?dic=V_D_FW_COMP"}
+    }
+]

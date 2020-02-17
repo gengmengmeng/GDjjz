@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewBag.Title = "ViewFormAdd";
+}
+<div style="padding:10px">
+    <form id="formUserData" method="post" action="@Url.Action("ActionEditUserInfo", "Home")">
+        <div style="max-height:500px">
+            @* __TIPS__ 以下这些界面元素，可以从Add窗体中复制过来*@
+            <div style="margin-bottom:5px;">
+                <input id="USER_ID" name="USER_ID" class="easyui-textbox" data-options="iconCls:'icon-man',label:'登陆账号：',labelWidth:100,labelAlign:'right',
+                       required:true,
+                       disabled:true,
+                       " style="width:300px;">
+                <input id="USER_NAME" name="USER_NAME" class="easyui-textbox" data-options="label:'用户名称：',labelWidth:100,labelAlign:'right',required:true,multiline:false,
+                       required:true,
+	                   validType:['length[2,50]']
+                       " style="width:300px;">
+            </div>
+            <div style="margin-bottom:5px;">
+                <input id="USER_PASSWD" name="USER_PASSWD" class="easyui-passwordbox" data-options="label:'登陆密码1：',labelWidth:100,labelAlign:'right',required:false,
+                       required:false,
+	                   validType:['length[6,50]']
+                       " style="width:300px;">
+                <input id="REP_USER_PASSWD" name="REP_USER_PASSWD" class="easyui-passwordbox" data-options="label:'校验密码：',labelWidth:100,labelAlign:'right',required:false,
+                       required:false,
+                       " validType="repasswd['#USER_PASSWD']" style="width:300px;">
+            </div>
+            <div style="margin-bottom:5px;">
+                <input id="TEL1" name="TEL1" class="easyui-textbox" data-options="label:'联系电话1：',labelWidth:100,labelAlign:'right',required:false,multiline:false" style="width:300px;">
+                <input id="TEL2" name="TEL2" class="easyui-textbox" data-options="label:'联系电话2：',labelWidth:100,labelAlign:'right',required:false,multiline:false" style="width:300px;">
+            </div>
+            <div style="margin-bottom:5px;">
+                <input id="EMAIL" name="EMAIL" class="easyui-textbox" data-options="validType:['email'],label:'电子邮箱：',labelWidth:100,labelAlign:'right',required:false,multiline:false" style="width:600px;">
+            </div>
+            <div style="margin-bottom:5px;">
+                <input id="ADDR" name="ADDR" class="easyui-textbox" data-options="label:'联系地址：',labelWidth:100,labelAlign:'right',required:false,multiline:false" style="width:600px;">
+            </div>            
+        </div>
+    </form>
+</div>
+<script>
+    function btnEditUserInfoForm_OK_Event(e) {
+        console.log($('#formUserData').serialize());
+        $('#formUserData').form('submit', {
+            onSubmit: function (d) {
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    return false;
+                }
+                @* __TIPS__: 这里可以把Form以外的一些值添加到服务器 *@
+                return true;
+            },
+            success: function (data) {
+                var data = eval('(' + data + ')');  // change the JSON string to javascript object
+                if (!data.success) {
+                    $.messager.alert({
+                        icon: 'error',
+                        title: '提示',
+                        msg: data.message
+                        });
+                }
+                else {
+                    $.messager.alert({
+                        icon: 'info',
+                        title: '提示',
+                        msg: '修改成功！',
+                        fn: function () {
+                            $('#dialogEditUser').dialog("close");
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    @* 绑定窗体外按钮的事件，按钮名称要与Index里的对应 *@
+    $(function () {
+        $("#btnEditUserInfoForm_OK").bind('click', btnEditUserInfoForm_OK_Event);
+        //加载录入内容
+        @*
+            __TIPS__:这里修改加载数据的地址,可以使用绝对地址的方式【@Url.Action("JsonDataList", "Roles")】
+        *@
+        $.getJSON("@Url.Action("JsonUserInfo", "Home")", function (data) {
+            console.log(data);
+            if (data.rows == undefined) {
+                $.messager.alert({
+                    icon: 'error',
+                    title: '错误',
+                    msg: "加载当前用户信息失败！"
+                });
+                return;
+            }
+            $('#formUserData').form("load", data.rows[0]);
+        });        
+        $.extend($.fn.validatebox.defaults.rules, {
+            repasswd: {
+                validator: function (value, param) {
+                    console.log("v:" + value + "  p:" + param);
+                    return value == $(param[0]).val();
+                },
+                message: '两次密码不一致！'
+            }
+        });
+    })
+</script>
+
+

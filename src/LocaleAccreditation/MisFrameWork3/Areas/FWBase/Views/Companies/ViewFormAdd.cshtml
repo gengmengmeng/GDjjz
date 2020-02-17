@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewBag.Title = "ViewFormAdd";
+}
+<div style="padding:10px">
+    @* __TIPS__: 修改action为服务端接受数据的地址 *@
+    <form id="formData" method="post" action="ActionAdd">
+        <div style="max-height:500px">
+            <div style="margin-bottom:5px;">
+                <input id="NAME" name="NAME" class="easyui-textbox" data-options="width:'96.5%',labelWidth:120,label:'单位名称：',labelAlign:'right',required:true" >
+            </div>
+            <div style="margin-bottom:5px;">
+                <input id="COMPANY_CODE" name="COMPANY_CODE" class="easyui-textbox" data-options="width:'48%',labelWidth:120,label:'单位编号：',labelAlign:'right',required:true,multiline:false" >
+                <input id="FAX" name="FAX" class="easyui-textbox" data-options="width:'48%',labelWidth:120,label:'传真号码：',labelAlign:'right',required:false,multiline:false" >
+            </div>
+            <div style="margin-bottom:5px;">
+                <input id="TEL1" name="TEL1" class="easyui-textbox" data-options="width:'48%',labelWidth:120,label:'电话1：',labelAlign:'right',required:false,multiline:false" >
+                <input id="TEL2" name="TEL2" class="easyui-textbox" data-options="width:'48%',labelWidth:120,label:'电话2：',labelAlign:'right',required:false,multiline:false" >
+            </div>
+            <div style="margin-bottom:5px;">
+                <input id="ADDR_WORKING" name="ADDR_WORKING" class="easyui-textbox" data-options="width:'96.5%',labelWidth:120,label:'办公地址：',labelAlign:'right',required:false,multiline:false">
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    function btnForm_OK_Click_Event(e) {
+        console.log($('#formData').serialize());
+        $('#formData').form('submit', {
+            onSubmit: function (d) {
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    return false;
+                }
+                @* __TIPS__:这里可以把Form以外的一些值添加到服务器 *@                
+                //d.OPERATE = "2";
+                return true;
+            },
+            success: function (data) {
+                var data = eval('(' + data + ')');  // change the JSON string to javascript object
+                if (!data.success) {
+                    $.messager.alert(
+                        {
+                            icon: 'error',
+                            title: '提示',
+                            msg: data.message
+                        });
+                }
+                else {
+                    $.messager.alert(
+                        {
+                            title: '提示',
+                            msg: '保存成功！',
+                            fn: function () {
+                                var opt = $('#winMainForm').dialog("options");
+                                opt.dg.datagrid("reload");
+                                $('#winMainForm').dialog("close");
+                            }
+                        }
+                    );
+                }
+            }
+        });
+    }
+    $(function () {
+        $("#btnForm_OK").bind('click', btnForm_OK_Click_Event);
+        $("#TYPE").combogrid({
+            label: '企业类型：',
+            panelWidth: 300,
+            width: 600,
+            delay: 500,
+            mode: 'remote',
+            idField: 'DM',
+            textField: 'MC',
+            url: 'JsonCompanies',
+            columns: [[
+                { field: 'DM', title: '代码', width: 80 },
+                { field: 'MC', title: '名称', width: 220 }
+            ]]
+        });
+    })
+</script>
+
+

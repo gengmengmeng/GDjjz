@@ -1,0 +1,333 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutStdConditionCombinationQuery.cshtml";
+    //__TIPS__*: 
+    //下面这行可以定义查询项中是否包含日期查询框，如果查询不需要日期的，可以没注释这句。
+    ViewBag.DateRangeType = new string[] { "录入时间" };
+    //系统默认是不允许删除记录的，如果要显示查询界面的删除按钮，就开启这句
+    ViewBag.ShowDeleteButton = false;
+    ViewBag.ShowChangeStateButton = false;
+
+    //以下这些语句设置按钮的状态，也可以Controller里根据权限进行配置
+    ViewBag.DisableBTN_Add = true;
+    ViewBag.DisableBTN_Edit = true;
+    ViewBag.DisableBTN_Delete = true;
+    ViewBag.DisableBTN_Disable = true;
+    ViewBag.DisableBTN_Enable = true;
+}
+<div id="winMainForm"></div>
+<script>
+    function btnAddEvent() {
+        $('#winMainForm').dialog({
+            title: '增加信息',
+            width: 700,//窗体边框12,加上内部div的边距20
+            height: 300,
+            top: 5,
+            closed: false,
+            cache: false,
+            striped: true,
+            'dg': $('#cmpDG'),
+            @* __TIPS__: 这里是击【增加】窗体时，窗体内容的所在地址，修改控制器即可，最好使用同名，如果用绝地址就用@Url.Action("函数", "控制器")的方式 *@
+            href: "ViewFormAdd",
+            modal: true,
+            onLoad: function () {
+            },
+            buttons: [
+                {
+                    id: 'btnForm_OK',
+                    text: '保存',
+                    iconCls: 'icon-ok',
+                },
+                {
+                text: '取消',
+                    iconCls: 'icon-cancel',
+                    handler: function (e) {
+                        $('#winMainForm').dialog("close");
+                    }
+                },
+            ]
+        });
+    }
+
+    function btnEditEvent() {
+        var selectRow = $('#cmpDG').datagrid("getSelected");
+        if (selectRow == null || selectRow == undefined) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '请选择一条要 【编辑】 的记录'
+            });
+            return;
+        }
+        $('#winMainForm').dialog({
+            title: '修改信息 【' + selectRow.MACHINENO+'】',
+            width: 670,//窗体边框12,加上内部div的边距20
+            height: 300,
+            top: 5,
+            closed: false,
+            cache: false,
+            'dg': $('#cmpDG'),
+            @* __TIPS__: 这里是击【修改】窗体时，窗体内容的所在地址，修改控制器即可，最好使用同名，如果用绝地址就用@Url.Action("函数", "控制器") 的方式 *@
+            href: "ViewFormEdit",
+            modal: true,
+            onLoad: function () {
+                //加载录入项
+                $("#OBJECT_ID").val(selectRow.ID);
+                $("#cmpMenu").tree({
+                    "url": "JsonMenuData?OBJECT_ID=" + selectRow.ID,
+                    checkbox: true,
+                });
+            },
+            buttons: [
+                {
+                    id: 'btnForm_OK',
+                    text: '保存',
+                    iconCls: 'icon-ok',
+                },
+                {
+                    text: '取消',
+                    iconCls: 'icon-cancel',
+                    handler: function (e) {
+                        $('#winMainForm').dialog("close");
+                    }
+                },
+
+            ]
+        });
+    }
+
+    function btnRemoveEvent() {
+        var selectRow = $('#cmpDG').datagrid("getSelected");
+        if (selectRow == null || selectRow == undefined) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '请选择一条要 【删除】 的记录'
+            });
+            return;
+        }
+
+        $.messager.confirm({
+            icon: 'question',
+            title: '询问',
+            width: '400px',
+            @* __TIPS__ *: 这里是要根据实际数据结构提示相应的信息 *@
+            msg: '您确定要删除编号为【' + selectRow.MACHINENO + '】的设备？',
+            fn: function (r) {
+                if (r) {
+                    $.ajax({
+                        @* __TIPS__: 这里是提交数据的地址地址，最好使用同名，如果用绝地址就用@Url.Action("函数", "控制器") 的方式 *@
+                    url: "ActionDelete",
+                        data: {
+                        @* __TIPS__: 根据实际数据结构传入主键 *@
+                            "OBJECT_ID": selectRow.ID,
+                            "MACHINENO": selectRow.MACHINENO,
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data.success) {
+                            $('#cmpDG').datagrid("reload");
+                        }
+                        else {
+                            $.messager.alert({
+                                icon: 'error',
+                                title: '提示',
+                                msg: data.message
+                            });
+                        }
+                    },
+                    error: function (data) {
+
+                    }
+                });
+            }
+    }
+        });
+    }
+
+    function btnDisableEvent() {
+        var selectRow = $('#cmpDG').datagrid("getSelected");
+        if (selectRow == null || selectRow == undefined) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '请选择一条要 【停用】 的记录'
+            });
+            return;
+        }
+        if (selectRow.DISABLED == 1) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '已是【停用】状态'
+            });
+            return;
+        }
+        $.messager.confirm({
+            icon: 'question',
+            title: '询问',
+            width: '400px',
+            @* __TIPS__*: 这里是要根据实际数据结构提示相应的信息 *@
+            msg: '您确定要停用编号为【' + selectRow.MACHINENO + '】的设备？',
+            fn: function (r) {
+                if (r) {
+                    $.ajax({
+                        @* __TIPS__: 这里是提交数据的地址地址，最好使用同名，如果用绝地址就用@Url.Action("函数", "控制器") 的方式 *@
+                        url: "ActionChangeState",
+                        data: {
+                            @* __TIPS__: 根据实际数据结构传入主键 *@
+                            "OBJECT_ID": selectRow.ID,
+                            "state":1
+                        },
+                        success:function(data) {
+                            console.log(data);
+                            if (data.success) {
+                                $('#cmpDG').datagrid("reload");
+                            }
+                            else {
+                                $.messager.alert({
+                                    icon: 'error',
+                                    title: '提示',
+                                    msg: data.message
+                                });
+                            }
+                        },
+                        error: function (data) {
+
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    function btnEnableEvent() {
+        var selectRow = $('#cmpDG').datagrid("getSelected");
+        if (selectRow == null || selectRow == undefined) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '请选择一条要 【启用】 的记录'
+            });
+            return;
+        }
+        if (selectRow.DISABLED == 0) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '已是【启用】状态'
+            });
+            return;
+        }
+        $.ajax({
+            url: "ActionChangeState",
+            data: {
+                @* __TIPS__: 根据实际数据结构传入主键 *@
+                "OBJECT_ID": selectRow.ID,
+                "state":0
+            },
+            success:function(data) {
+                console.log(data);
+                if (data.success) {
+                    $('#cmpDG').datagrid("reload");
+                }
+                else {
+                    $.messager.alert({
+                        icon: 'error',
+                        title: '提示',
+                        msg: data.message
+                    });
+                }
+            },
+            error: function (data) {
+                alert(data);
+            }
+        });
+    }
+    $(function () {
+        $('#cmpDG').datagrid({
+            url: 'JsonDataList',
+            singleSelect: true,
+            pagination: true,
+            rownumbers: true,
+            remoteSort: true,
+            fit: true,
+            striped: true,
+            onDblClickRow: function (index, field, value) {
+                $("#stdBtnEdit").click();
+            },
+            //toolbar: "#cmpDgToolBar",
+        @* __TIPS__*: 以下同表格中显示的每列的配置信息 *@
+            frozenColumns: [[
+                { field: 'MACHINE_CODE', title: '设备编号', width: 150, align: 'center', sortable: true },               
+                { field: 'COMPANY_CODE_V_D_FW_COMP__MC', title: '所属单位名称', align: 'center', width: 240 },
+                {
+                    field: 'CREATE_ON', title: '录入时间', align: 'center', width: 140,
+                    formatter: function (d) {
+                        return moment(d).format("YYYY-MM-DD HH:mm");
+                    }
+                }               
+            ]],
+            columns: [[
+                { field: 'GZCODE', title: '故障代码', align: 'center', width: 150},
+                { field: 'GZCODE_D_FAULT__MC', title: '故障描述', align: 'center', width: 300 },
+                { field: 'GZMS', title: '故障详情', align: 'center', width: 400 },
+                
+            ]]
+        });
+        //初始化分页栏按钮,增加导出Excel功能
+        var pager = $("#cmpDG").datagrid().datagrid('getPager');
+        console.log('111111111111');
+        console.log(pager);
+        debugger
+        pager.pagination({
+            buttons: [
+                {
+                    text: '导出',
+                    iconCls: 'icon-table-export',
+                    handler: function () {
+                        var data = {};
+                        data.Search = $("#search").textbox("getValue");
+                        data.date_range_type = $("#date_range_type").combobox("getValue");
+                        data.start_date = $("#start_date").datebox("getValue");
+                        data.end_date = $("#end_date").datebox("getValue");
+                        var result = {};
+                        var aa = $("#ttCdtResult").tree("getRoot");
+                        if (aa != null) {
+                            createConditionCombination(result, aa);
+                            var base = new Base64();
+                            var b64 = base.encode(JSON.stringify(result));
+                            data.cdt_combination = b64;
+                        }
+                        ef3.datagridToExcel(data);
+                    }
+                }@*,
+                {
+                    text: '打印',
+                    iconCls: 'icon-table-export',
+                    handler: function () {
+                        var data = {};
+                        data.title = "打印设备报表";
+                        data.Search = $("#search").textbox("getValue");
+                        data.date_range_type = $("#date_range_type").combobox("getValue");
+                        data.start_date = $("#start_date").datebox("getValue");
+                        data.end_date = $("#end_date").datebox("getValue");
+                        var result = {};
+                        var aa = $("#ttCdtResult").tree("getRoot");
+                        if (aa != null) {
+                            createConditionCombination(result, aa);
+                            var base = new Base64();
+                            var b64 = base.encode(JSON.stringify(result));
+                            data.cdt_combination = b64;
+                        }
+                        console.log(data);
+                        var url = '@Url.Action("ActionPrint", "Machine")';
+                        $.print(url, data);
+                    }
+                }*@
+            ]
+        });
+    });
+</script>
+

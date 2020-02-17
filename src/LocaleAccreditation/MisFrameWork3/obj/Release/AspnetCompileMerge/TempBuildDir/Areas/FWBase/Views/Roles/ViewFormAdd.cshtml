@@ -1,0 +1,82 @@
+﻿
+@{
+    ViewBag.Title = "ViewFormAdd";
+}
+<div style="padding:10px">
+    <form id="formData" method="post" action="ActionAdd">
+        <div style="max-height:500px">
+            <div style="margin-bottom:5px;">
+                <input id="ROLE_NAME" name="ROLE_NAME" class="easyui-textbox" data-options="iconCls:'icon-man',label:'角色名称：',labelAlign:'right',required:true" style="width:300px;">
+                <input id="SORT_CODE" name="SORT_CODE" class="easyui-numberspinner" data-options="min:0,max:9999999,editable:true,label:'排序编号：',labelAlign:'right'" style="width:300px;">
+            </div>
+            <div style="margin-bottom:5px;">
+                <input id="ROLE_DESCRIPT" name="ROLE_DESCRIPT" class="easyui-textbox" data-options="label:'角色描述：',labelAlign:'right',required:false,multiline:true,height:'40px'" style="width:605px;">
+            </div>
+            <div title="操作权限" class="easyui-panel" style="width:605px;">
+                <ul id="cmpMenu" class="easyui-tree"></ul>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    function btnForm_OK_Click_Event(e) {
+        console.log($('#formData').serialize());
+        $('#formData').form('submit', {
+            onSubmit: function (d) {
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    return false;
+                }
+                //把操作权限加进来
+                var params = "";
+                var nodes = $("#cmpMenu").tree('getChecked');
+                var firstItem = false;
+                for (i = 0; i < nodes.length; i++) {
+                    if (nodes[i].id != undefined) {
+                        console.log(nodes[i].id);
+                        if (firstItem)
+                            params = params + ",";
+                        if (params == "")
+                            firstItem = true;
+                        params += nodes[i].id;
+                    }
+                }
+                d.OPERATE = params;
+                return true;
+            },
+            success: function (data) {
+                var data = eval('(' + data + ')');  // change the JSON string to javascript object
+                if (!data.success) {
+                    $.messager.alert(
+                    {
+                        icon: 'error',
+                        title: '提示',
+                        msg: data.message
+                    });
+                }
+                else {
+                    $.messager.alert(
+                        {
+                            title: '提示',
+                            msg: '保存成功！',
+                            fn: function () {
+                                var opt = $('#winMainForm').dialog("options");
+                                opt.dg.datagrid("reload");
+                                $('#winMainForm').dialog("close");
+                            }
+                        }
+                    );
+                }
+            }
+        });
+    }
+    $(function () {
+        $("#cmpMenu").tree({
+            "url": "JsonMenuData",
+            checkbox: true,
+        });
+        $("#btnForm_OK").bind('click', btnForm_OK_Click_Event);
+    })
+</script>
+
+

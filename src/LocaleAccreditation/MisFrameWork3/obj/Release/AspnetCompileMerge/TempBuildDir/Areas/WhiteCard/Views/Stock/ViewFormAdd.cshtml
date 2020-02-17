@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "ViewFormAdd";
+}
+<div style="padding: 10px">
+    <form id="formData" method="post" action="ActionAdd" enctype="multipart/form-data">
+        @* __TIPS__ 输入元素尽量统一为两列以内，宽度要与Index 打开的窗体宽度对应*@
+        <div style="margin-bottom:5px;">
+            <input id="COMPANY_ID" name="COMPANY_ID" class="easyui-diclarge" data-options="width:'96%',labelWidth:120,label:'单位：',labelAlign:'right',required:true,
+                       title: '所属单位',
+                       dic_json_url:'JsonDicLarge?comma_is_or=true&dic=V_D_FW_COMP',
+                       dic_view_url:'ViewDicLargeUI?dic=V_D_FW_COMP',
+                       dic_multiple_value:false
+                       ">
+        </div>
+        <div style="margin-bottom:5px;">
+            <input id="INPUT_TIME" name="INPUT_TIME" class="easyui-datebox" data-options="width:'96%',labelWidth:120,label:'录入时间：',labelAlign:'right',required:true,">
+        </div>
+    </form>
+</div>
+<script>
+
+    function btnForm_OK_Click_Event(e) {  
+        console.log($('#formData').serialize());
+        $('#formData').form('submit', {
+            onSubmit: function (d) {
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    return false;
+                }
+                @* __TIPS__:这里可以把Form以外的一些值添加到服务器 *@
+                //d.OPERATE = "2";
+                return true;
+            },
+            success: function (data) {
+                var data = eval('(' + data + ')');  // change the JSON string to javascript object
+                if (!data.success) {
+                    $.messager.alert(
+                        {
+                            icon: 'error',
+                            title: '提示',
+                            msg: data.message
+                        });
+                }
+                else {
+                    $.messager.alert(
+                        {
+                            title: '提示',
+                            msg: '保存成功！',
+                            fn: function () {
+                                $('#cmpDG').datagrid("reload");
+                                $('#winMainForm').dialog("close");
+                            }
+                        });
+                }
+            }
+        });
+    }
+    $(function () {
+        $("#btnForm_OK").bind('click', btnForm_OK_Click_Event);
+
+    })
+</script>
+
+

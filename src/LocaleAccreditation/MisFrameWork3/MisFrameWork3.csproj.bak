@@ -1,0 +1,462 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DC02F7D2-710C-4756-8444-0646F656DCD6}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MisFrameWork3</RootNamespace>
+    <AssemblyName>MisFrameWork3</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress>false</Use64BitIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Common.Log, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9720bde59dbab768, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Log.1.0.0.0\lib\net45\Common.Log.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.8.1\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.8.1\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.8.1\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.8.1\lib\net45\Microsoft.AI.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.8.1\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.8.1\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.TelemetryCorrelation, Version=1.0.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.4\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MisFrameWork.core, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\x86\MisFrameWork.core.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.121.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.SQLite, Version=1.0.109.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.109.2\lib\net45\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.3.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.5.1\lib\net45\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.6\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.6\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.6\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.6\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.6\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.6\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AI.Agent.Intercept">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\FWBase\Controllers\CompaniesController.cs" />
+    <Compile Include="Areas\FWBase\Controllers\FWServicesController.cs" />
+    <Compile Include="Areas\FWBase\Controllers\RolesController.cs" />
+    <Compile Include="Areas\FWBase\Controllers\UsersController.cs" />
+    <Compile Include="Areas\FWBase\FWBaseAreaRegistration.cs" />
+    <Compile Include="Areas\Interfaces\Controllers\InterfacesController.cs" />
+    <Compile Include="Areas\Interfaces\InterfacesAreaRegistration.cs" />
+    <Compile Include="Areas\Machine\Controllers\MachineController.cs" />
+    <Compile Include="Areas\Machine\MachineAreaRegistration.cs" />
+    <Compile Include="Areas\WhiteCard\Controllers\GrantController.cs" />
+    <Compile Include="Areas\WhiteCard\Controllers\RecoveryController.cs" />
+    <Compile Include="Areas\WhiteCard\Controllers\StockController.cs" />
+    <Compile Include="Areas\WhiteCard\WhiteCardAreaRegistration.cs" />
+    <Compile Include="Areas\ZZJLCX\Controllers\DWZZJLController.cs" />
+    <Compile Include="Areas\ZZJLCX\Controllers\SBZZJLController.cs" />
+    <Compile Include="Areas\ZZJLCX\Controllers\ZZJLCXController.cs" />
+    <Compile Include="Areas\ZZJLCX\ZZJLCXAreaRegistration.cs" />
+    <Compile Include="Areas\Zzy\Controllers\ZzyController.cs" />
+    <Compile Include="Areas\Zzy\ZzyAreaRegistration.cs" />
+    <Compile Include="Classes\Authorize\LoginedAttribute.cs" />
+    <Compile Include="Classes\Controller\FWBaseController.cs" />
+    <Compile Include="Classes\Controller\FWExtServiceController.cs" />
+    <Compile Include="Classes\DbListener\AfterInsertGetAutoGenerateId.cs" />
+    <Compile Include="Classes\DbListener\BeforeInsertGeneratePKFromTable.cs" />
+    <Compile Include="Classes\DbListener\BeforeInsertLoadOracleSequence.cs" />
+    <Compile Include="Classes\DbListener\BeforeInsertOrUpdateUserInfo.cs" />
+    <Compile Include="Classes\GVar.cs" />
+    <Compile Include="Classes\Membership\FWUserInfo.cs" />
+    <Compile Include="Classes\Membership\Membership.cs" />
+    <Compile Include="Classes\WebSystem\CommonFun.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\images\bar.jpg" />
+    <Content Include="Content\images\btn_login.jpg" />
+    <Content Include="Content\images\Login.jpg" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Areas\FWBase\Views\Companies\Index.cshtml" />
+    <Content Include="Areas\FWBase\Views\Companies\ViewFormAdd.cshtml" />
+    <Content Include="Areas\FWBase\Views\Companies\ViewFormEdit.cshtml" />
+    <Content Include="Areas\FWBase\Views\DemoCommonInput\Index.cshtml" />
+    <Content Include="Areas\FWBase\Views\DemoCommonInput\ViewDicCompany.cshtml" />
+    <Content Include="Areas\FWBase\Views\DemoCommonInput\ViewFormAdd.cshtml" />
+    <Content Include="Areas\FWBase\Views\DemoCommonInput\ViewFormEdit.cshtml" />
+    <Content Include="Areas\FWBase\Views\Roles\Index.cshtml" />
+    <Content Include="Areas\FWBase\Views\Roles\ViewFormAdd.cshtml" />
+    <Content Include="Areas\FWBase\Views\Roles\ViewFormEdit.cshtml" />
+    <Content Include="Areas\FWBase\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\FWBase\Views\Users\Index.cshtml" />
+    <Content Include="Areas\FWBase\Views\Users\ViewFormAdd.cshtml" />
+    <Content Include="Areas\FWBase\Views\Users\ViewFormEdit.cshtml" />
+    <Content Include="Areas\FWBase\Views\Users\ViewFormQueryCompany.cshtml" />
+    <Content Include="Areas\FWBase\Views\web.config" />
+    <Content Include="Areas\FWBase\Views\_ViewStart.cshtml" />
+    <Content Include="Configs\database.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Configs\db_listeners_config.config" />
+    <Content Include="Configs\db_listeners_config_oracle.config" />
+    <Content Include="Configs\db_listeners_config_sqlite.config" />
+    <Content Include="Configs\db_listeners_config_sqlserver.config" />
+    <Content Include="Configs\db_table_dic_map_config.config" />
+    <Content Include="Configs\dicInfo.config" />
+    <Content Include="Configs\log4net.config" />
+    <Content Include="Configs\system.config" />
+    <Content Include="Configs\menu.config" />
+    <Content Include="Areas\Machine\Views\web.config" />
+    <Content Include="Areas\Machine\Views\Machine\Index.cshtml" />
+    <Content Include="Areas\Machine\Views\Machine\ViewFormAdd.cshtml" />
+    <Content Include="Areas\Machine\Views\Machine\ViewFormEdit.cshtml" />
+    <Content Include="Areas\Machine\Views\Machine\ViewSSDW.cshtml" />
+    <Content Include="Areas\Machine\Views\Machine\ViewSBFZR.cshtml" />
+    <Content Include="Areas\Zzy\Views\web.config" />
+    <Content Include="Areas\Zzy\Views\Zzy\Index.cshtml" />
+    <Content Include="Areas\Zzy\Views\Zzy\ViewSSDW.cshtml" />
+    <Content Include="Areas\Zzy\Views\Zzy\ViewFormAdd.cshtml" />
+    <Content Include="Areas\Zzy\Views\Zzy\ViewFormEdit.cshtml" />
+    <Content Include="Areas\ZZJLCX\Views\web.config" />
+    <Content Include="Areas\ZZJLCX\Views\ZZJLCX\Index.cshtml" />
+    <Content Include="Areas\ZZJLCX\Views\SBZZJL\Index.cshtml" />
+    <Content Include="Areas\ZZJLCX\Views\ZZJLCX\JsonConditionCombinationInfo.cshtml" />
+    <Content Include="Areas\ZZJLCX\Views\DWZZJL\Index.cshtml" />
+    <Content Include="Areas\ZZJLCX\Views\DWZZJL\JsonConditionCombinationInfo.cshtml" />
+    <Content Include="Areas\WhiteCard\Views\Grant\Index.cshtml" />
+    <Content Include="Areas\WhiteCard\Views\Grant\JsonConditionGrant.cshtml" />
+    <Content Include="Areas\WhiteCard\Views\Grant\ViewCompanyType.cshtml" />
+    <Content Include="Areas\WhiteCard\Views\Grant\ViewFormAdd.cshtml" />
+    <Content Include="Areas\WhiteCard\Views\Grant\ViewFormEdit.cshtml" />
+    <Content Include="Areas\WhiteCard\Views\Recovery\Index.cshtml" />
+    <Content Include="Areas\WhiteCard\Views\Recovery\JsonConditionRecovery.cshtml" />
+    <Content Include="Areas\WhiteCard\Views\Recovery\ViewCardType.cshtml" />
+    <Content Include="Areas\WhiteCard\Views\Recovery\ViewFormAdd.cshtml" />
+    <Content Include="Areas\WhiteCard\Views\Recovery\ViewFormEdit.cshtml" />
+    <Content Include="Areas\WhiteCard\Views\Recovery\ViewRecovery.cshtml" />
+    <Content Include="Areas\WhiteCard\Views\Stock\Index.cshtml" />
+    <Content Include="Areas\WhiteCard\Views\Stock\JsonConditionStock.cshtml" />
+    <Content Include="Areas\WhiteCard\Views\Stock\ViewFormAdd.cshtml" />
+    <Content Include="Areas\WhiteCard\Views\Stock\ViewFormEdit.cshtml" />
+    <Content Include="Areas\WhiteCard\Views\Stock\ViewStockType.cshtml" />
+    <Content Include="Areas\WhiteCard\Views\web.config" />
+    <Content Include="Areas\ZZJLCX\Views\SBZZJL\JsonConditionCombinationInfo.cshtml" />
+    <Content Include="Areas\Machine\Views\Machine\JsonConditionCombinationInfo.cshtml" />
+    <Content Include="Areas\FWBase\Views\Companies\JsonConditionCombinationInfo.cshtml" />
+    <Content Include="Areas\FWBase\Views\Roles\JsonConditionCombinationInfo.cshtml" />
+    <Content Include="Areas\FWBase\Views\Users\JsonConditionCombinationInfo.cshtml" />
+    <Content Include="Areas\ZZJLCX\Views\ZZJLCX\ViewFormEdit.cshtml" />
+    <Content Include="Areas\ZZJLCX\Views\ZZJLCX\ViewStateType.cshtml" />
+    <Content Include="Areas\ZZJLCX\Views\ZZJLCX\ViewErrorType.cshtml" />
+    <Content Include="Areas\Interfaces\Controllers\InterfacesController.cs.bak" />
+    <Content Include="Areas\Interfaces\Views\web.config" />
+    <Content Include="Areas\ZZJLCX\Views\DWZZJL\ViewDwzzjlType.cshtml" />
+    <Content Include="Areas\ZZJLCX\Views\SBZZJL\ViewSbzzjlType.cshtml" />
+    <Content Include="Areas\ZZJLCX\Views\ZZJLCX\ViewZzjlcxType.cshtml" />
+    <None Include="Views\Home\ViewHeader.cshtml" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\fw_plugins\base64.js" />
+    <Content Include="Scripts\fw_plugins\export_datagrid.js" />
+    <Content Include="Scripts\fw_plugins\framework-ui.js" />
+    <Content Include="Scripts\fw_plugins\md5.js" />
+    <Content Include="Scripts\jquery-3.3.1.js" />
+    <Content Include="Scripts\jquery-3.3.1.min.js" />
+    <Content Include="Scripts\jquery-3.3.1.slim.js" />
+    <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\misframework3.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <None Include="Views\Home\ViewHomePage.cshtml" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\ViewMainForm.cshtml" />
+    <Content Include="Views\Shared\_LayoutStdQuery.cshtml" />
+    <Content Include="Views\Home\ViewEditUserInfo.cshtml" />
+    <Content Include="Views\Shared\ViewCommonDicUI.cshtml" />
+    <Content Include="Views\Shared\_LayoutViewDiclarge.cshtml" />
+    <Content Include="Views\Shared\_LayoutClassifyQuery.cshtml" />
+    <Content Include="Views\Shared\_LayoutUserQuery.cshtml" />
+    <Content Include="Views\Shared\_LayoutMachineQuery.cshtml" />
+    <Content Include="Views\Shared\_LayoutZzyQuery.cshtml" />
+    <Content Include="Views\Shared\_LayoutSBZZJLQuery.cshtml" />
+    <Content Include="Views\Shared\_LayoutZZJLCXQuery.cshtml" />
+    <Content Include="Views\Shared\_LayoutZZYZZJLQuery.cshtml" />
+    <Content Include="Views\Shared\_LayoutStdConditionCombinationQuery.cshtml" />
+    <Content Include="Views\Shared\_LayoutStdConditionGrantQuery.cshtml" />
+    <Content Include="Views\Shared\_LayoutStdConditionRecoveryQuery.cshtml" />
+    <Content Include="Views\Shared\_LayoutStdConditionStockQuery.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Areas\FWBase\Models\" />
+    <Folder Include="Areas\FWBase\Views\FWServices\" />
+    <Folder Include="Areas\Machine\Models\" />
+    <Folder Include="Areas\Machine\Views\Shared\" />
+    <Folder Include="Areas\ZZJLCX\Models\" />
+    <Folder Include="Areas\ZZJLCX\Views\Shared\" />
+    <Folder Include="Areas\Zzy\Models\" />
+    <Folder Include="Areas\Zzy\Views\Shared\" />
+    <Folder Include="ext_service_sample\" />
+    <Folder Include="Models\" />
+    <Folder Include="Views\FWExtService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <None Include="packages.config" />
+    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.3.1.min.map" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\MisFrameWork3.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>29390</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>Localhost:29390/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.109.2\build\net45\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.109.2\build\net45\System.Data.SQLite.Core.targets'))" />
+  </Target>
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.109.2\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.109.2\build\net45\System.Data.SQLite.Core.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

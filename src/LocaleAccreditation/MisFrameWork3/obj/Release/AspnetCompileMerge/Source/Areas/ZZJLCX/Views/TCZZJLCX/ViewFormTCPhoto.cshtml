@@ -1,0 +1,35 @@
+﻿@{
+}
+<div style="padding: 10px">
+    <form id="formData" method="post" action="" enctype="multipart/form-data">
+        @* __TIPS__ 输入元素尽量统一为两列以内，宽度要与Index 打开的窗体宽度对应*@
+        <input type="hidden" id="SLBH" name="SLBH" value="" />
+        @* 不要使用实际的主键 *@
+        <div style="max-height: 600px">
+            @* __TIPS__ 以下这些界面元素，可以从Add窗体中复制过来*@
+            <img id="Photo" src="" width="350" height="320">
+        </div>
+    </form>
+</div>
+<script>
+    $(function () {
+        debugger
+        var a = $("#Photo").val();
+        $.getJSON("GetPhoto?SLBH=" + $("#SLBH").val(), function (data) {
+            if (data.photoUrl == "") {
+                $.messager.alert({
+                    icon: 'error',
+                    title: '错误',
+                    msg: "没有查到相应记录【" + $("#SLBH").val() + "】"
+                });
+                return;
+            } else {
+                debugger
+                var imgSrc = data.photoUrl;
+                $('#Photo').attr('src', imgSrc);
+            }
+        });
+    });
+</script>
+
+

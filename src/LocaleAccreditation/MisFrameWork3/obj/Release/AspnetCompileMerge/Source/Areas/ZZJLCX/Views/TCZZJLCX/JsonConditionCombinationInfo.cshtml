@@ -1,0 +1,68 @@
+﻿@{
+    Response.ContentType = "application/json";
+}
+[
+    {
+        "id":"SLBH",
+        "text":"受理编号",
+        "ctl_type":"textbox",
+        "options":{}
+    },
+    {
+        "id":"ZZZXPH",
+        "text":"制证芯片号",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"GMSFHM",
+        "text":"身份号码",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"ZZSBID",
+        "text":"制证设备编号",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"ZZXXZZDW",
+        "text":"制证单位代码",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"ZZXXZZDWMC",
+        "text":"制证单位名称",
+        "ctl_type":"textbox"
+    },
+    {
+        "id":"ZZXXZZSFCG",
+        "text":"状态",
+        "ctl_type":"dicshort",
+        "options":{
+            "url": "JsonDicShort?dic=D_ZKSTATE"
+        }
+    },
+    {
+        "id":"ZZXXZZRQ",
+        "text":"制证时间",
+        "ctl_type":"datebox",
+        "options":{}
+    },
+   {
+        "id":"RESERVATION12",
+        "text":"分散制证代码",
+        "ctl_type":"textbox"
+    },
+   {
+        "id":"ZZXXSFDQ",
+        "text":"制证是否读取",
+        "ctl_type":"textbox"
+    },
+{
+        "id":"COMPANY_ID_1",
+        "text":"单位名称含下级",
+        "ctl_type":"diclarge",
+        "options":{
+         "dic_json_url": "JsonDicLarge?comma_is_or=true&dic=V_D_FW_COMP",
+            "dic_view_url": "ViewDicLargeUI?dic=V_D_FW_COMP"}
+    }
+]

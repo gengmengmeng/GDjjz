@@ -1,0 +1,66 @@
+﻿@{
+    Response.ContentType = "application/json";
+}
+[
+
+    {
+        "id":"RECOVERY_NAME",
+        "text":"回收人",
+        "ctl_type":"textbox",
+        "options":{}
+    },
+   {
+        "id":"RECOVERY_ID",
+        "text":"回收人单位",
+        "ctl_type":"diclarge",
+        "options":{
+            "dic_json_url": "JsonDicLarge?comma_is_or=true&dic=V_D_FW_COMP",
+            "dic_view_url": "ViewDicLargeUI?dic=V_D_FW_COMP"
+        }
+    },
+   {
+        "id":"SUBMIT_NAME",
+        "text":"提交人",
+        "ctl_type":"textbox",
+        "options":{}
+    },
+ {
+        "id":"SUBMIT_ID",
+        "text":"提交人单位",
+        "ctl_type":"diclarge",
+        "options":{
+            "dic_json_url": "JsonDicLarge?comma_is_or=true&dic=V_D_FW_COMP",
+            "dic_view_url": "ViewDicLargeUI?dic=V_D_FW_COMP"
+        }
+    },
+   {
+        "id":"SUBMIT_NUMBER",
+        "text":"回收数量",
+        "ctl_type":"textbox",
+        "options":{}
+    },
+    {
+        "id":"TYPE_ID",
+        "text":"回收类型",
+        "ctl_type":"diclarge",
+        "options":{
+            "dic_json_url": "JsonDicLarge?comma_is_or=true&dic=D_CARDTYPE",
+            "dic_view_url": "ViewDicLargeUI?dic=D_CARDTYPE"
+        }
+    },
+   {
+        "id":"SUBMIT_PHONE",
+        "text":"提交人联系方式",
+        "ctl_type":"textbox",
+        "options":{}
+    },
+   {
+        "id":"COMPANY_ID_1",
+        "text":"单位名称含下级",
+        "ctl_type":"diclarge",
+        "options":{
+            "dic_json_url": "JsonDicLarge?comma_is_or=true&dic=V_D_FW_COMP",
+            "dic_view_url": "ViewDicLargeUI?dic=V_D_FW_COMP"
+        }
+    }
+]

@@ -1,0 +1,159 @@
+﻿@{ 
+    Layout = "";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>广东居住证现场制证管理系统</title>
+    <link href="/Content/font-awesome.css" rel="stylesheet">
+    <link href="/Scripts/jeasyui/themes/@ViewBag.Theme/easyui.css" rel="stylesheet">
+    <link href="/Scripts/jeasyui/themes/icon.css" rel="stylesheet">
+    <link href="/Scripts/jeasyui/themes/color.css" rel="stylesheet">
+    <link href="/Content/Site.css" rel="stylesheet">
+
+
+    <script src="/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="/Scripts/jquery.validate.min.js"></script>
+    <script src="/Scripts/moment.min.js"></script>
+    <script src="/Scripts/moment-with-locales.min.js"></script>
+    <script src="/Scripts/jeasyui/jquery.easyui.min.js"></script>
+    <script src="/Scripts/jeasyui/locale/easyui-lang-zh_CN.js"></script>    
+</head>
+<div id="tab-tools" style="border-style: solid;border-width: 0 0 1px 0;">
+    <a href="javascript:void(0)" id="sb" class="easyui-menubutton"
+       data-options="menu:'#mmThemes',iconCls:''">主题</b></a>
+    <a href="javascript:void(0)" id="sb" class="easyui-menubutton"
+       data-options="menu:'#mm1',iconCls:'icon-user'">@ViewBag.UserName</b></a>
+    <div>
+        <div id="mm1" style="width:100px;">
+            <div data-options="iconCls:'icon-building',disabled:true">修改单位信息</div>
+            <div class="menu-sep"></div>
+            <div data-options="iconCls:'icon-vcard-edit'" onclick="javascript:btnModifyUserEvent()">修改个人信息</div>
+            <div class="menu-sep"></div>
+            <div data-options="iconCls:'icon-logout'" onclick="btnLogoutEvent()">退出</div>
+        </div>
+    </div>
+
+    <div id="mmThemes">
+        <div data-options="iconCls:''" href="@Url.Action("ViewMainForm", "Home")?theme=default">default</div>
+        <div data-options="iconCls:''" href="@Url.Action("ViewMainForm", "Home")?theme=black">black</div>
+        <div data-options="iconCls:''" href="@Url.Action("ViewMainForm", "Home")?theme=bootstrap">bootstrap</div>
+        <div data-options="iconCls:''" href="@Url.Action("ViewMainForm", "Home")?theme=gray">gray</div>
+        <div data-options="iconCls:''" href="@Url.Action("ViewMainForm", "Home")?theme=material">material</div>
+        <div data-options="iconCls:''" href="@Url.Action("ViewMainForm", "Home")?theme=material-teal">material-teal</div>
+        <div data-options="iconCls:''" href="@Url.Action("ViewMainForm", "Home")?theme=metro">metro</div>
+    </div>
+</div>
+<div id="dialogEditUser"></div>
+<body>
+    <div class="easyui-layout" fit="true">
+    <div data-options="region:'north',split:false,href:'/Home/ViewHeader'" style="height:50px;">
+
+    </div>
+    <div data-options="region:'west', split:true" style="width:220px;">
+        <ul id="cmpMenu"></ul>
+    </div>
+    <div data-options="region:'center'">
+        <div id="cmpTabs" class="easyui-tabs" style="height:100%" data-options="tools:'#tab-tools'">
+            <div id="tabPageHome" title="首页" style="padding:20px;height:100%;display:none;" data-options="href:'@Url.Action("ViewHomePage", "Home")'" >
+                tab1
+            </div>
+        </div>
+    </div>
+    <div data-options="region:'south',split:false" style="height:25px;">
+        Ver 20190409
+    </div>
+</div>
+</body>
+</html>
+<script>
+    function btnLogoutEvent() {
+        $.getJSON("@Url.Action("ActionLogout", "Home")", function (data) {
+            window.location.href = "@Url.Action("Index", "Home")";
+        })
+    }
+    
+    function updateSession() {
+        $.getJSON("ActionUpdateSession?d=" + new Date(), function (d) {
+            //alert(d);
+        });
+    }
+
+    //保持 Session 有效
+    setInterval(updateSession, 20000);
+    function btnModifyUserEvent(){
+        $('#dialogEditUser').dialog({
+            title: '修改当前用户信息',
+            width: 670,//窗体边框12,加上内部div的边距20
+            height: 280,
+            closed: false,
+            cache: false,
+            @* __TIPS__: 这里是击【增加】窗体时，窗体内容的所在地址，修改控制器即可，最好使用同名，如果用绝地址就用@Url.Action("函数", "控制器") 的方式 *@
+            href: "@Url.Action("ViewEditUserInfo", "Home")",
+            modal: true,
+            onLoad: function () {
+            },
+            buttons: [
+                {
+                    id: 'btnEditUserInfoForm_OK',
+                    text: '保存',
+                    iconCls: 'icon-ok',
+                },
+                {
+                    text: '取消',
+                    iconCls: 'icon-cancel',
+                    handler: function (e) {
+                        $('#dialogEditUser').dialog("close");
+                    }
+                },
+            ]
+        });
+    }
+    $(function () {
+        $('#cmpTabs').tabs({
+            border:false
+        });
+
+        $("#cmpMenu").tree({
+            "url": "@Url.Action("JsonMenuData", "Home")",
+            "onClick": function (node) {
+                if (node.children == undefined) {
+                    if ((node.attributes == undefined) || (node.attributes.url == undefined)) {
+                        alert("没有设置业务链接地址");
+                    }
+                    else {
+                        var allPage = $('#cmpTabs').tabs("tabs");
+                        for (i = 0; i < allPage.length; i++) {
+                            var page = allPage[i];
+                            if (page[0].attributes != undefined) {
+                                console.log("打开的面板："+page[0].id);
+                                if (page[0].id == node.id) {                                    
+                                    $('#cmpTabs').tabs("select",i);
+                                    return;
+                                }
+                            }
+                        }
+                        //获取可用区域的大小
+                        var w = $("#tabPageHome").css("width");
+                        var h = $("#tabPageHome").css("height");
+                        w = w.substr(0, w.length - 2);
+                        h = h.substr(0, h.length - 2);
+                        w = 0 + w - 4-16;
+                        h = 0 + h - 4;
+                        $('#cmpTabs').tabs('add', {
+                            id: node.id,
+                            title: node.text,
+                            closable: true,
+                            iconCls: node.iconCls,
+                            selected: true,
+                            content: "<div style='padding-left:8px;padding-right:8px;'><iframe src='" + node.attributes.url + "' width='" + w + "px' height='" + h + "px'  frameborder='0' seamless marginheight='5px'></iframe></div>"
+                        });
+                    }
+                }
+            }
+        });
+    })
+</script>

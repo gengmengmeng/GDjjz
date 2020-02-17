@@ -1,0 +1,228 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutStdConditionRecoveryQuery.cshtml";
+    ViewBag.DateRangeType = new string[] { "提交日期" };
+    ViewBag.ShowDeleteButton = true;
+    ViewBag.ShowUploadButton = true;
+    ViewBag.ShowChangeStateButton = false;
+
+    //以下这些语句设置按钮的状态，也可以Controller里根据权限进行配置
+    ViewBag.DisableBTN_Add = false;
+    ViewBag.DisableBTN_Edit = true;
+    ViewBag.DisableBTN_Delete = false;
+    ViewBag.DisableBTN_Upload = false;
+    ViewBag.DisableBTN_Disable = false;
+    ViewBag.DisableBTN_Enable = false;
+ }
+<div id="winMainForm"></div>
+<script>
+
+    function btnAddEvent() {
+        $('#winMainForm').dialog({
+            title: '增加信息',
+            width: 720,//窗体边框12,加上内部div的边距20
+            height: 480,
+            top: 5,
+            closed: false,
+            cache: false,
+            striped: true,
+            @* __TIPS__: 这里是点击【增加】按钮时，窗体内容的加载的地址，要与控制器同名，取框架默认值的话就不需要修改，如果用绝地址就用@Url.Action("函数", "控制器")的方式 *@
+            href: "ViewFormAdd",
+            modal: true,
+            onLoad: function () {
+            },
+            buttons: [
+                {
+                    id: 'btnForm_OK',
+                    text: '保存',
+                    iconCls: 'icon-ok',
+                },
+                {
+                text: '取消',
+                    iconCls: 'icon-cancel',
+                    handler: function (e) {
+                        $('#winMainForm').dialog("close");
+                    }
+                },
+            ]
+        });
+    }
+
+    function btnEditEvent() {
+        var selectRow = $('#cmpDG').datagrid("getSelected");
+        var plan_id = selectRow.PLAN_FILE;
+        if (selectRow == null || selectRow == undefined) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '请选择一条要 【编辑】 的记录'
+            });
+            return;
+        }
+        $('#winMainForm').dialog({
+
+            title: '修改信息 【' + selectRow.ID+'】',
+            width: 720,//窗体边框12,加上内部div的边距20
+            height: 500,
+            top: 5,
+            closed: false,
+            cache: false,
+            @* __TIPS__: 这里是点击【修改】按钮时，窗体内容的加载的地址，要与控制器同名，取框架默认值的话就不需要修改，如果用绝地址就用@Url.Action("函数", "控制器") 的方式 *@
+            href: "ViewFormEdit",
+            modal: true,
+            queryParams: { palnfile: plan_id},
+            onLoad: function () {
+                //加载录入项
+                $("#OBJECT_ID").val(selectRow.ID);
+            },
+            buttons: [
+                {
+                    id: 'btnForm_OK',
+                    text: '保存',
+                    iconCls: 'icon-ok',
+                },
+                {
+                    text: '取消',
+                    iconCls: 'icon-cancel',
+                    handler: function (e) {
+                        $('#winMainForm').dialog("close");
+                    }
+                },
+
+            ]
+        });
+    }
+
+    function btnRemoveEvent() {
+        var selectRow = $('#cmpDG').datagrid("getSelected");
+        if (selectRow == null || selectRow == undefined) {
+            $.messager.alert({
+                icon: 'warning',
+                title: '提示',
+                msg: '请选择一条要 【删除】 的记录'
+            });
+            return;
+        }
+
+        $.messager.confirm({
+            icon: 'question',
+            title: '询问',
+            width: '400px',
+            @* __TIPS__*: 这里是要根据实际数据结构提示相应的信息 *@
+            msg: '您确定要删除该回收记录吗？',
+            fn: function (r) {
+                if (r) {
+                    $.ajax({
+                        @* __TIPS__: 这里是提交数据的地址地址，最好使用同名，如果用绝地址就用@Url.Action("函数", "控制器") 的方式 *@
+                        url: "ActionDelete",
+                        data: {
+                            @* __TIPS__: 根据实际数据结构传入主键 *@
+                            "OBJECT_ID": selectRow.ID,
+                            "state":1
+                        },
+                        success:function(data) {
+                            console.log(data);
+                            if (data.success) {
+                                $('#cmpDG').datagrid("reload");
+                            }
+                            else {
+                                $.messager.alert({
+                                    icon: 'error',
+                                    title: '提示',
+                                    msg: data.message
+                                });
+                            }
+                        },
+                        error: function (data) {
+
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    $(function () {
+    $('#cmpDG').datagrid({
+        url: 'JsonDataList',
+        singleSelect:true,
+        pagination: true,
+        rownumbers: true,
+        remoteSort: true,
+        striped: true,
+        onDblClickRow: function (index, field, value) {
+            $("#stdBtnEdit").click();
+        },
+        //toolbar: "#cmpDgToolBar",
+        @* __TIPS__*: 以下同表格中显示的每列的配置信息 *@
+        frozenColumns: [[
+            { field: 'RECOVERY_NAME', title: '回收人员', align: 'center', width: 120 },
+            { field: 'RECOVERY_ID_V_D_FW_COMP__MC', title: '回收人员单位', width: 240, align: 'center',sortable: true },
+            { field: 'SUBMIT_NAME', title: '提交人员', align: 'center', width: 120 },
+            { field: 'SUBMIT_ID_V_D_FW_COMP__MC', title: '提交人员单位', width: 240, align: 'center', sortable: true },          
+        ]],
+        columns: [[
+            { field: 'SUBMIT_NUMBER', title: '回收数量', align: 'center', width: 100 },
+            { field: 'TYPE_ID_D_CARDTYPE__MC', title: '回收类型', align: 'center', width: 100 },
+            {
+                field: 'RECOVERY_TIME', title: '回收时间', width: 120, align: 'center', sortable: true,
+                formatter: function (d) {
+                    return moment(d).format("YYYY-MM-DD");
+                }
+            },
+            { field: 'SUBMIT_PHONE', title: '提交人员联系方式', width: 180, align: 'center', sortable: true },
+
+        ]]
+    });
+    var pager = $("#cmpDG").datagrid().datagrid('getPager')
+    pager.pagination({
+        buttons: [
+            {
+                text: '导出',
+                iconCls: 'icon-table-export',
+                handler: function () {
+                    var data = {};
+                    data.Search = $("#search").textbox("getValue");
+                    data.date_range_type = $("#date_range_type").combobox("getValue");
+                    data.start_date = $("#start_date").datebox("getValue");
+                    data.end_date = $("#end_date").datebox("getValue");
+                    var result = {};
+                    var aa = $("#ttCdtResult").tree("getRoot");
+                    if (aa != null) {
+                        createConditionCombination(result, aa);
+                        var base = new Base64();
+                        var b64 = base.encode(JSON.stringify(result));
+                        data.cdt_combination = b64;
+                    }
+                    ef3.datagridToExcel(data);
+                }
+            }@*,
+            {
+                text: '打印',
+                iconCls: 'icon-table-export',
+                handler: function () {
+                    var data = {};
+                    data.title = "打印回收报表";
+                    data.Search = $("#search").textbox("getValue");
+                    data.date_range_type = $("#date_range_type").combobox("getValue");
+                    data.start_date = $("#start_date").datebox("getValue");
+                    data.end_date = $("#end_date").datebox("getValue");
+                    var result = {};
+                    var aa = $("#ttCdtResult").tree("getRoot");
+                    if (aa != null) {
+                        createConditionCombination(result, aa);
+                        var base = new Base64();
+                        var b64 = base.encode(JSON.stringify(result));
+                        data.cdt_combination = b64;
+                    }
+                    console.log(data);
+                    var url='@Url.Action("ActionPrint", "Recovery")';
+                    $.print(url, data);
+                }
+            }*@
+        ]
+        });
+    });
+</script>
+

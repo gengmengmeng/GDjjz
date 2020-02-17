@@ -1,0 +1,96 @@
+﻿@{
+}
+<div style="padding: 10px">
+    <form id="formData" method="post" action="ActionEdit" enctype="multipart/form-data">
+        @* __TIPS__ 输入元素尽量统一为两列以内，宽度要与Index 打开的窗体宽度对应*@
+        <input type="hidden" id="OBJECT_ID" name="OBJECT_ID" value="" />
+        @* 不要使用实际的主键 *@
+        <div style="margin-bottom:5px;">
+            <input id="EXTEND_NAME" name="EXTEND_NAME" class="easyui-textbox" data-options="width:'96%',labelWidth:120,iconCls:'icon-man',label:'发卡人：',labelAlign:'right',required:true">
+        </div>
+        <div style="margin-bottom:5px;">
+            <input id="EXTEND_ID_V_D_FW_COMP__MC" name="EXTEND_ID_V_D_FW_COMP__MC" class="easyui-diclarge" data-options="width:'96%',labelWidth:120,label:'发卡人单位：',labelAlign:'right',required:false,
+                       title: '单位选择',
+                       dic_json_url:'JsonDicLarge?comma_is_or=true&dic=V_D_FW_COMP',
+                       dic_view_url:'ViewDicLargeUI?dic=V_D_FW_COMP',
+                       dic_multiple_value:false
+                       ">
+        </div>
+        <div style="margin-bottom:5px;">
+            <input id="RECEIVE)_NAME" name="RECEIVE_NAME" class="easyui-textbox" data-options="width:'96%',labelWidth:120,iconCls:'icon-man',label:'领卡人：',labelAlign:'right',required:true">
+        </div>
+        <div style="margin-bottom:5px;">
+            <input id="RECEIVE_ID_V_D_FW_COMP__MC" name="RECEIVE_ID_V_D_FW_COMP__MC" class="easyui-diclarge" data-options="width:'96%',labelWidth:120,label:'领卡人单位：',labelAlign:'right',required:false,
+                       title: '单位选择',
+                       dic_json_url:'JsonDicLarge?comma_is_or=true&dic=V_D_FW_COMP',
+                       dic_view_url:'ViewDicLargeUI?dic=V_D_FW_COMP',
+                       dic_multiple_value:false
+                       ">
+        </div>
+        <div style="margin-bottom:5px;">
+            <input id="RECEIVE_NUMBER" name="RECEIVE_NUMBER" class="easyui-numberbox" data-options="width:'48%',labelWidth:120,label:'领卡数量：',labelAlign:'right',min:0,editable:true">
+            <input id="RECEIVE_PHONE" name="RECEIVE_PHONE" class="easyui-textbox" data-options="width:'48%',labelWidth:120,label:'领卡人联系方式：',labelAlign:'right',required:false,">
+        </div>
+        <div style="margin-bottom:5px;">
+            <input id="RECEIVE_TIME" name="RECEIVE_TIME" class="easyui-datebox" data-options="width:'96%',labelWidth:120,label:'领卡时间：',labelAlign:'right',required:false,">
+        </div>
+    </form>
+</div>
+<script>
+    function btnForm_OK_Click_Event(e) {
+        console.log($('#formData').serialize());
+        $('#formData').form('submit', {
+            onSubmit: function (d) {
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    return false;
+                }
+                return true;
+            },
+            success: function (data) {
+                var data = eval('(' + data + ')');  // change the JSON string to javascript object
+                if (!data.success) {
+                    $.messager.alert({
+                        icon: 'error',
+                        title: '提示',
+                        width: 300,
+                        msg: data.message
+                    });
+                }
+                else {
+                    $.messager.alert({
+                        icon: 'info',
+                        title: '提示',
+                        msg: '修改成功！',
+                        fn: function () {
+                            $('#winMainForm').dialog("close");
+                            $('#cmpDG').datagrid("reload");
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    @* 绑定窗体外按钮的事件，按钮名称要与Index里的对应 *@
+    $(function () {
+        $("#btnForm_OK").bind('click', btnForm_OK_Click_Event);
+        //加载录入内容
+        @* __TIPS__:这里修改加载数据的地址,可以使用绝对地址的方式【@Url.Action("JsonDataList", "Roles")】*@
+        $.getJSON("JsonDataList?id=" + $("#OBJECT_ID").val(), function (data) {
+            console.log(data);
+            if (data.rows == undefined) {
+                $.messager.alert({
+                    icon: 'error',
+                    title: '错误',
+                    msg: "没有查到相应记录【" + $("#OBJECT_ID").val() + "】"
+                });
+                return;
+            }
+            $('#formData').form("load", data.rows[0]);
+            $("[type='hidden']").change();//__TIPS__:hidden控件改变后无法触发change事件，所以要单独处理，否则可能会影响某些控件的使用。
+        });
+    });
+</script>
+
+

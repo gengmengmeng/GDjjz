@@ -1,0 +1,23 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutViewDiclarge.cshtml";
+}
+<script>
+
+    function cmpDialogDic_DG_init() {
+        $('#cmpDialogDic_DG').datagrid({
+                singleSelect: true,
+                pagination: true,
+                rownumbers: true,
+                remoteSort: true,
+                height: "360px",
+                width: "665px",
+                toolbar: "#toolbarDialogDic_DG",
+                @* __TIPS__ *: 以下同表格中显示的每列的配置信息 *@
+                columns: [[
+                { field: 'DM', title: '代码', width: 100 },
+                { field: 'MC', title: '描述', width: 380 },
+                { field: 'PY', title: '拼音', width: 100 }
+            ]]
+        });
+    }
+</script>
